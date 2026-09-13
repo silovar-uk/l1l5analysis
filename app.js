@@ -246,7 +246,7 @@ function renderStructureSummary() {
           <summary>中心命題を見る</summary>
           <p>${esc(d.thesis)}</p>
         </details>` : ''}
-      <a class="full-review-link" href="#structural-review">詳しい骨格評価を見る ↓</a>
+      <button class="full-review-link" type="button" data-scroll-review>詳しい骨格評価を見る ↓</button>
     </div>`;
 }
 
@@ -299,7 +299,6 @@ function renderParagraph(paragraph) {
 
 function renderEvaluation() {
   const review = state.doc.structuralReview || state.doc.evaluation || inferEvaluation(state.doc);
-  evaluationRoot.id = 'structural-review';
   evaluationRoot.innerHTML = `
     <header class="evaluation-head">
       <p class="eyebrow">FULL STRUCTURAL REVIEW</p>
@@ -350,6 +349,10 @@ function bindArticleInteractions() {
   document.querySelectorAll('[data-scroll-paragraph]').forEach(button => {
     button.addEventListener('click', () => scrollToParagraph(button.dataset.scrollParagraph));
   });
+
+  document.querySelectorAll('[data-scroll-review]').forEach(button => {
+    button.addEventListener('click', scrollToReview);
+  });
 }
 
 function scrollToSection(id) {
@@ -365,6 +368,10 @@ function scrollToParagraph(id) {
   target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
   target.classList.add('is-targeted');
   window.setTimeout(() => target.classList.remove('is-targeted'), 1100);
+}
+
+function scrollToReview() {
+  evaluationRoot.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
 }
 
 function observeSections() {
