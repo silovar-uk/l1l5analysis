@@ -83,7 +83,7 @@ body[data-view="library"] .page{max-width:1060px}
 .structure-signature{max-width:890px;padding:17px 19px;border-left:3px solid var(--ink);background:var(--paper)}.structure-signature>span{display:block;margin-bottom:5px;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.11em}.structure-signature p{margin:0;font:600 clamp(15px,2vw,18px)/1.75 Georgia,"Hiragino Mincho ProN",serif}
 .review-short{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.review-short-item{padding:14px 15px;border:1px solid var(--line);border-radius:10px}.review-short-item span{display:block;margin-bottom:4px;color:var(--accent);font-size:8px;font-weight:900;letter-spacing:.09em}.review-short-item p{margin:0;color:#51524c;font-size:12px;line-height:1.7}
 .thesis-note{max-width:760px;margin-top:12px;padding:0 2px}.thesis-note summary{width:max-content;color:var(--muted);font-size:10px;font-weight:800;cursor:pointer}.thesis-note p{margin:9px 0 0;padding:12px 14px;border-left:2px solid var(--line-strong);color:#50514b;font:600 13px/1.7 Georgia,"Hiragino Mincho ProN",serif}
-.full-review-link{display:inline-block;margin-top:13px;color:var(--muted);font-size:10px;font-weight:800;text-underline-offset:3px}
+.full-review-link{display:inline-block;margin-top:13px;padding:0;border:0;background:transparent;color:var(--muted);font-size:10px;font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.full-review-link:hover,.full-review-link:focus-visible{color:var(--accent)}
 
 /* Sections and paragraphs */
 .section-block{scroll-margin-top:82px;padding:0 0 72px}.section-head{max-width:760px;margin-bottom:22px}.section-index{color:var(--accent);font-size:9px;font-weight:900;letter-spacing:.14em}.section-head h2{margin:6px 0 8px;font:600 clamp(25px,3.5vw,35px)/1.26 Georgia,"Hiragino Mincho ProN",serif;letter-spacing:-.025em}.section-head>p{margin:0;color:#5f605a;font-size:13px}
@@ -103,7 +103,7 @@ body[data-view="library"] .page{max-width:1060px}
   .library-head.compact{grid-template-columns:1fr;gap:10px;padding-bottom:18px}.library-head h1{font-size:31px}.library-description{font-size:12px}
   .library-row-main{grid-template-columns:28px minmax(0,1fr);gap:10px;padding:20px 0 38px}.library-row-arrow{display:none}.library-row-title{font-size:21px}.library-row-signature{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:12px}.library-row-source{left:38px;right:auto;bottom:15px}
   .title-row{grid-template-columns:1fr;gap:13px}.source-cta{justify-self:start;margin-top:0}.doc-head h1{font-size:35px}
-  .structure-map{margin-inline:calc(-1 * clamp(18px,4vw,34px))}.map-head{padding-inline:18px}.map-axis{min-width:130px;gap:36px}.map-scroll{padding-bottom:5px}.map-grid{min-width:720px}
+  .structure-map{margin-inline:-18px}.map-head{padding-inline:18px}.map-axis{min-width:130px;gap:36px}.map-scroll{padding-bottom:5px}.map-grid{min-width:720px}
   .structure-summary{margin-bottom:50px}.structure-read{padding-top:16px}.review-short{grid-template-columns:1fr}.structure-signature{margin-inline:0}
   .section-block{padding-bottom:54px}.section-head{margin-bottom:18px}.section-head h2{font-size:27px}
   .paragraph-item summary{grid-template-columns:1fr;gap:7px;padding:14px 34px 14px 0}.structural-summary{font-size:14px}.paragraph-detail{grid-template-columns:1fr;gap:11px;padding:0 26px 16px 0}.paragraph-detail>div{padding-top:9px}
