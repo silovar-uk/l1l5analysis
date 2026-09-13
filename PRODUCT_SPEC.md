@@ -1,29 +1,67 @@
-# Argument Altitude — Product Spec v3
+# Argument Altitude — Product Spec v4
 
 ## North Star
 
-**論考本文を読むページではなく、論考の設計図を見るページ。**
+**論考本文を読むサイトではなく、複数の論考の「骨格」を収集し、比較可能な形で保存するArchive。**
 
-実際の文章は表示せず、各段落を次の4要素へ抽象化する。
+実際の文章は表示せず、各Paragraphを次の要素へ抽象化する。
 
 - L1〜L5：主要な抽象度
 - Role：論証上の役割
 - Structural Summary：その段落が論証の中で何をしているか
 - Why：なぜそのLevelと判断したか
+- Confidence：判定確信度
 
-## Core model
-
-分析単位はParagraphのみ。
+## Information architecture
 
 ```text
-Document
-└ Section
-   └ Paragraph
+Analysis Library
+└ Article
+   ├ Thesis
+   ├ Structural Review
+   └ Section
+      └ Paragraph
 ```
 
-Sentence-level analysis、Document Terrain、Paragraph Wave、Sentence Inspectorはv3では使用しない。
+Libraryをホームとし、単記事ページを最上位に置かない。
 
-## Level
+## Library
+
+一覧はカードギャラリーではなく縦型Archive。
+
+各Articleに表示するもの：
+
+- Title
+- Subtitle
+- Section / Paragraph Unit数
+- Structural Signature
+- Structural Note
+- Tags
+- 原文リンク
+- 「分析を見る」導線
+
+Structural Signatureは内容要約ではなく、論証の進行そのものを一行で表す。
+
+例：
+
+`現在の常識 → 逆の過去 → 複線的因果 → 理論化 → 現在 → 規範判断`
+
+## Article
+
+記事詳細では次を表示する。
+
+1. Analysis Libraryへ戻る導線
+2. Title / Subtitle
+3. 原文CTA
+4. Thesis
+5. Structural Review
+6. Level Guide
+7. Section
+8. Paragraph Reverse Outline
+
+## Level orientation
+
+Levelの定義自体は従来どおり。
 
 - L1 GROUND — 証拠・個別事実
 - L2 SCENE — 具体説明・背景
@@ -31,71 +69,102 @@ Sentence-level analysis、Document Terrain、Paragraph Wave、Sentence Inspector
 - L4 CLAIM — 部分主張・論点
 - L5 HORIZON — 理論・広い含意
 
-Levelは精密な測定値ではなく相対的な仮説。
-
-## Main UX
-
-### 1. Hero
-
-- タイトル
-- 原文URL
-- 論考全体の中心命題
-- Section数 / Paragraph Unit数
-
-### 2. Level Guide
-
-`L1 具体 → L5 抽象` を一度だけ説明。
-
-折れ線グラフは置かない。
-
-### 3. Section
-
-各Sectionに：
-
-- 構造的タイトル
-- Section全体の役割要約
-- Paragraph Level Sequence（文字列）
-
-### 4. Paragraph Reverse Outline
-
-各Paragraphを1行の構造要素として表示。
-
-Levelが上がるほど右へインデントする。
+ただし空間表現を次に統一する。
 
 ```text
-P01 L2 ENTRY
-  現在の問題を身近な入口として置く
-
-        P02 L4 QUESTION
-        問題を個人のマナーから規範の成立条件へ移す
-
-             P03 L5 HORIZON
-             公共空間における他者共存の問題へ広げる
+抽象                                      具体
+L5 HORIZON → L4 CLAIM → L3 BRIDGE → L2 SCENE → L1 GROUND
 ```
 
-色ではなく**位置**を主要な符号にする。
+**L5が最も左、L1が最も右。**
 
-### 5. Details on demand
+Paragraphの表示depthは：
 
-Paragraphを選択したときだけ：
+`depth = 5 - level`
+
+とする。
+
+Level番号そのものを反転・変換してはいけない。
+
+## Movement
+
+Paragraph順は維持する。
+
+- Levelが上がる：より抽象へ移動 → UI上は左方向
+- Levelが下がる：より具体へ移動 → UI上は右方向
+- 同じLevel：HOLD
+
+Movement表示も位置の意味と矛盾させない。
+
+## Paragraph Reverse Outline
+
+各Paragraphを1つの構造要素として表示する。
+
+通常表示：
+
+- Paragraph ID
+- Level
+- Role
+- Structural Summary
+- Movement
+
+Details on demand：
 
 - WHY Lx
 - Confidence
 
-を開く。
+原文本文は表示しない。
 
-通常時はStructural Summaryだけで全体を読める。
+## Structural Review
 
-## 守破離
+点数化しない。
 
-### 守
-段落を順番に並べ、L1〜L5の基本的な抽象度だけを見せる。
+表示項目：
 
-### 破
-段落内容ではなく、ENTRY / QUESTION / TURN / INTERPRETATION / SYNTHESISなどの論証機能を見る。
+- 全体構造
+- 強いところ
+- 弱いところ
+- 特徴的な転換
+- 改善余地
+- 盗める構成技法
 
-### 離
-原文を読まずにReverse Outlineだけを眺めても、論考がどこで具体へ降り、どこで上位命題へ上がり、どこで現在の問いへ戻るかを把握できる状態を目指す。
+目的は文章の良し悪しを採点することではなく、骨格の説得戦略を評価すること。
+
+## Data architecture
+
+### Library manifest
+
+`data/index.json`
+
+一覧に必要な軽量情報だけを持つ。
+
+- id
+- slug
+- dataPath
+- title
+- subtitle
+- source
+- analyzedAt
+- sectionCount
+- paragraphCount
+- structuralSignature
+- structuralNote
+- tags
+
+### Article data
+
+各記事JSONはSection / Paragraphの構造分析を保持する。
+
+外部著作物全文は保存しない。
+
+## Routing
+
+GitHub Pages互換性を優先しHash Routingを採用。
+
+- `#/` — Library
+- `#/article/<slug>` — Article
+
+Browser Back / Forwardで正常に遷移できること。
 
 ## Source / copyright
 
@@ -105,13 +174,39 @@ external sourceでは原文本文をpublic dataへ保存しない。
 
 - URL
 - 書誌情報
-- 段落の構造分析
+- Thesis
+- Structural Signature
+- Structural Review
+- Paragraph構造分析
 
 のみ。
 
 ## Import / Export
 
-schemaVersion 3.0 のJSONをImport / Exportできる。
+ImportはArticle JSONを対象とする。
+
+Import後はArticle Viewとして確認できる。
+
+Exportは現在表示中のArticle JSONのみ。
+
+Library manifest編集は別責務とし、ブラウザからGitHubへ直接書き込まない。
+
+## Mobile
+
+Desktopのインデントをそのまま縮小しない。
+
+- Desktop indent step：約50px
+- Mobile：12〜16px程度
+
+ただし必ずL5が左、L1が右という順序は維持する。
+
+L1でも本文幅が潰れないこと。
+
+## Favicon
+
+抽象へ向かう方向を新しい空間モデルへ合わせる。
+
+**右下 → 左上**へ上がる階段として表現する。
 
 ## Forbidden
 
@@ -123,12 +218,23 @@ schemaVersion 3.0 のJSONをImport / Exportできる。
 - 平均抽象度
 - 100点満点
 - L5を良いとみなす評価
+- Libraryを画像中心カードギャラリーにすること
 
 ## Acceptance criteria
 
-- 5秒以内にL1=具体、L5=抽象を理解できる。
-- 文章を読まなくてもSectionごとの論証の役割が分かる。
-- Paragraphのインデントを見るだけで抽象度の上下が分かる。
-- `structuralSummary` が内容要約ではなく構造要約になっている。
-- 原文本文をpublic repoへ保存しない。
-- MobileでもL5のインデントで本文幅が潰れない。
+- 5秒以内に「論証構造の分析一覧」だと理解できる
+- LibraryからArticleへ1クリック
+- ArticleからLibraryへ迷わず戻れる
+- L5=左・L1=右がGuideとParagraph位置で一致する
+- Structural Signatureだけで記事同士の骨格差を想像できる
+- Structural Summaryだけで原文なしでも論の進行を追える
+- Structural Reviewが内容要約ではなく骨格評価になっている
+- 原文CTAを見失わない
+- MobileでもL1段落の可読幅が維持される
+- Browser Back / Forwardが動作する
+
+## Next milestone
+
+次に追加すべきものは検索ではなく **2本目の実データ**。
+
+Libraryが複数記事で本当に機能するかを確認し、Structural Signatureの粒度を校正する。
