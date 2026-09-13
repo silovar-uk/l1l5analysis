@@ -1,74 +1,92 @@
-# Argument Altitude — Product Spec v4.1
+# Argument Altitude — Product Spec v5
 
 ## North Star
 
 **論考の骨格を収集するArchiveを土台に、書くときに構造を再利用できるToolへ育てる。**
 
-原文本文は表示せず、Paragraphを抽象化する。
+今回のUI原則は明確に：
 
-- L1〜L5：主要な抽象度
-- Core Role：論証上の役割
-- roleDetail：テーマ・文章固有の補助ラベル
-- Structural Summary：その段落が論証の中で何をしているか
-- Why：Level判定理由
-- Confidence：判定確信度
+**便利 > 楽しさ。**
 
-## Calibration state
+ユーザーが「どこを見れば文章の構造が分かるか」を考える時間を減らす。
 
-2026-09-13時点：4論考・130 paragraph units。
+## UX priority
 
-異なる型を投入して、Library / Role / Levelを校正済み。
+ユーザー優先順位：
 
-詳細：
+1. Libraryでは最近追加した分析をすぐ読みたい
+2. Articleでは最初に文章全体の構造を把握したい
+3. 驚きより速度と迷いの少なさ
 
-- `ROLE_INVENTORY.md`
-- `LEVEL_CALIBRATION.md`
-- `CALIBRATION_NOTES.md`
-- `UX_REVIEW.md`
+したがって、UIは「説明 → 詳細」ではなく、**全体把握 → 必要箇所へ移動 → 詳細**の順にする。
 
 ## Information architecture
 
 ```text
 Analysis Library
 └ Article
-   ├ Thesis
-   ├ Structural Signature
-   ├ Structural Review
-   └ Section
-      └ Paragraph Unit
+   ├ Structure Map
+   ├ Structural Signature / Short Review
+   ├ Section
+   │  └ Paragraph Unit
+   └ Full Structural Review
 ```
-
-Libraryをホームとする。
 
 ## Library
 
-縦型Archive。
+ホームは最新分析を主役にする。
 
-主表示：
+表示：
 
-- Title / Subtitle
+- Title
+- Subtitle（補助）
 - Section / Paragraph Unit数
 - Structural Signature
-- Structural Note
-- 原文リンク
-- 「分析を見る」
+- 原文リンク（補助）
 
-Topic Tagsはdataには保持するが、構造選択に寄与しなかったため現在のUIでは非表示。
+表示しない：
 
-Structural Signatureは内容要約ではなく、論証の運動を表す。
+- Topic Tags
+- Structural Note全文
+- 大きなコンセプトHero
 
-## Article
+Import / Exportは `•••` メニューへ退避する。
 
-表示順：
+## Article order
 
-1. Analysis Libraryへ戻る
+1. Libraryへ戻る
 2. Title / Subtitle / 原文CTA
-3. Thesis
+3. **Structure Map**
 4. Structural Signature
-5. Structural Review
-6. Level Guide
-7. Section
-8. Paragraph Reverse Outline
+5. Short Structural Review
+6. Thesis（details on demand）
+7. Sections / Paragraph Reverse Outline
+8. Full Structural Review
+
+## Structure Map
+
+Structure Mapはグラフではない。
+
+**目次 + 全体構造 + Navigation** を一体化したUI。
+
+```text
+Section | L5 | L4 | L3 | L2 | L1
+```
+
+- L5が左、L1が右
+- Sectionが行
+- Paragraph Unitが各Level列のclickable item
+- Paragraphをクリックすると該当Unitへ移動
+- SectionをクリックするとSectionへ移動
+- 現在読んでいるSectionをIntersectionObserverでMap側へ反映
+- MobileではMap部分だけ横スクロール
+
+禁止：
+
+- 折れ線
+- SVG path
+- Chart library
+- 上下グラフの再導入
 
 ## Level orientation
 
@@ -77,62 +95,53 @@ Structural Signatureは内容要約ではなく、論証の運動を表す。
 L5 HORIZON → L4 CLAIM → L3 BRIDGE → L2 SCENE → L1 GROUND
 ```
 
-**L5が最も左、L1が最も右。**
-
-`depth = 5 - level`
-
 Level番号自体は反転しない。
 
-### Calibration
+Paragraph indentation：
 
-- L3：具体と抽象の接続・意味づけ
-- L4：Sectionや局所論証を支配する命題
-- L5：複数SectionまたはDocument全体を束ねる原理
-
-語彙の難しさではなく「束ねる範囲」で判断する。
-
-## Core Roles
-
-比較可能性を守るため `role` は次の12種類へ固定する。
-
-- ENTRY
-- QUESTION
-- EVIDENCE
-- INTERPRETATION
-- BRIDGE
-- CLAIM
-- TURN
-- QUALIFICATION
-- APPLICATION
-- SYNTHESIS
-- RETURN
-- CONCLUSION
-
-固有ニュアンスは `roleDetail`。
-
-例：`EVIDENCE / COUNTEREXAMPLE`、`TURN / RESET`。
+`depth = 5 - level`
 
 ## Paragraph Reverse Outline
 
 通常表示：
 
-- Paragraph ID
 - Level
 - Core Role
-- roleDetail（ある場合のみ）
+- Paragraph ID（弱く）
 - Structural Summary
-- Movement
 
 Details on demand：
 
+- roleDetail
 - WHY Lx
 - Confidence
 
-原文本文は表示しない。
+旧Movement文字列は表示しない。
+
+理由：Paragraph位置とStructure Mapがすでに抽象度移動を表現するため。
+
+## Removed redundancy
+
+v5で削除：
+
+- 独立Level Guide
+- Section sequence (`L2 → L4 → ...`)
+- `ABSTRACT / CONCRETE / HOLD` Movement表示
+- Hero内のmethod note
+- Article冒頭のFull Structural Review
+- `enhancements.css`
+
+同じ意味を複数箇所で説明しない。
 
 ## Structural Review
 
-点数化しない。
+Article上部では短評のみ：
+
+- 強み
+- 特徴的な転換
+- 弱点
+
+Full ReviewはArticle末尾：
 
 - 全体構造
 - 強いところ
@@ -141,75 +150,84 @@ Details on demand：
 - 改善余地
 - 盗める構成技法
 
+点数化しない。
+
 ## Data architecture
 
-`data/index.json` はLibrary用manifest。
+UI v5ではschema変更なし。
 
-各Article JSONは `schemaVersion: 4.1` を基準とし、Section / Paragraph分析とStructural Reviewを保持する。
+既存の：
 
-外部著作物全文は保存しない。
+- `sections[]`
+- `section.id`
+- `section.index`
+- `section.title`
+- `paragraphs[]`
+- `paragraph.id`
+- `paragraph.level`
+- `paragraph.role`
+- `paragraph.structuralSummary`
 
-## Routing
+からStructure Mapを生成する。
 
-- `#/` — Library
-- `#/article/<slug>` — Article
+UI都合でArticle JSONへ不要なfieldを追加しない。
 
-GitHub Pages互換のHash Routing。
+## Core Roles
 
-## Movement
+`ENTRY / QUESTION / EVIDENCE / INTERPRETATION / BRIDGE / CLAIM / TURN / QUALIFICATION / APPLICATION / SYNTHESIS / RETURN / CONCLUSION`
 
-- Levelが上がる：抽象化 → UI上は左 `← ABSTRACT`
-- Levelが下がる：具体化 → UI上は右 `CONCRETE →`
-- 同Level：HOLD
+固有ニュアンスは `roleDetail`。
 
-## Source / copyright
+## Mobile
 
-External sourceでは原文本文をpublic dataへ保存しない。
+- Structure Mapのみ横スクロール可
+- body/page全体は横スクロールさせない
+- Paragraph indentationは約10px step
+- L1でも十分な可読幅を残す
+- Libraryは1記事を縦方向で読みやすくする
 
-保持：URL / 書誌情報 / Thesis / Signature / Review / 構造分析。
+## Accessibility
 
-Owned sourceでもArgument Altitude側には原則として本文を複製せず、構造分析と原文リンクを分離する。
+Structure Map Pointは `button`。
 
-## Forbidden
+必須：
 
-- 上部折れ線
-- Sentence単位表示
-- 原文全文表示
-- Paragraph Wave
-- 平均抽象度
-- U字一致率
-- 点数
-- L5を良いと扱う評価
-- Topic TagsをLibraryの主軸にする
-- 4件時点でArchetypeを固定する
-- 実需なしの検索・比較・フィルター
+- keyboard操作可能
+- `aria-label` にLevel / Role / Structural Summaryを含む
+- Tooltipだけに意味を依存しない
+- `prefers-reduced-motion` 時はsmooth scrollを止める
 
 ## Acceptance criteria
 
-- LibraryでSignatureだけを見ても4記事の構造差が分かる
-- Library→Article、Article→Libraryが1操作
-- L5=左 / L1=右がGuideとParagraph位置で一致
-- Core Roleだけで異なるテーマの分析を共通表現できる
-- roleDetailなしでも大筋を理解できる
-- Structural Summaryだけで論の進行を追える
-- Structural Reviewが採点ではなく説得戦略の評価になっている
+Library：
+
+- 3秒以内に最新分析が分かる
+- Above the foldで記事一覧が始まる
+- Title + Signatureだけで記事を選べる
+
+Article：
+
+- 5秒以内に文章全体の構造がおおまかに分かる
+- Structure MapからParagraphへ1操作
+- L5左 / L1右がMapとParagraph位置で一致
+- Sectionの現在位置がMapで分かる
 - 原文CTAを見失わない
-- MobileでもL1の可読幅が維持される
 
-## Product decision
+Information reduction：
 
-複数記事を入れた結果、現時点の方向性は：
+- Guide / Sequence / Movementの重複がない
+- roleDetailは通常表示を圧迫しない
+- Full Reviewが本文読解の前に割り込まない
 
-1. **文章を書くために構造を再利用するTool**
-2. 論証パターンを発見するArchive
-3. 論考を保存するArchive
+## Current product decision
 
 Archiveは最終目的ではなく、再利用できる説得構造を蓄積する基盤。
 
-## Next milestone
+ただし次フェーズは新機能を増やす前に、Structure Mapの利用感を評価する。
 
-**STRUCTURE RECIPE / USE THIS STRUCTURE** を検証する。
+次候補：
 
-Structural Signature + Reverse Outlineから、固有テーマを除いた5〜10段階の再利用可能な執筆手順を作る。
+1. QUICK TRACE
+2. STRUCTURE RECIPE / USE THIS STRUCTURE
 
-ただしArchetype分類、比較、検索はまだ実装しない。
+検索・比較・Archetype分類は、実需が確認できるまで実装しない。
