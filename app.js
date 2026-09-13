@@ -17,17 +17,6 @@ const LEVELS = [
   { level: 1, name: 'GROUND', ja: '証拠・個別事実' }
 ];
 
-const CURATED_EVALUATIONS = {
-  'cinema-manners-outline': {
-    overall: '現在の「当たり前」をいったん壊し、歴史的な反例と複数の転換点を積み上げ、最後に価値判断へ戻る。脱自然化のための系譜学的な骨格がかなり明確。',
-    strengths: '各節が「具体へ降りる → 解釈する → 上位命題へ戻る」を反復しており、事例紹介だけで終わりにくい。節ごとの役割も、反例・制度・環境・規範ときれいに分かれている。',
-    weakness: '因果の橋が細い箇所がある。特に「時間・身体の規律 → 静粛」と「シネコンの高品質化 → マナー厳格化」は、骨格上はL3の橋渡しをもう一段厚くできる。',
-    turn: '最も効いている転換は終盤のRESET。歴史的に作られた規範だと示したあと、「だから緩めるべき」と直結せず、事実と価値判断を切り離して論考を立て直している。',
-    improvement: '終盤の規範論へ入る前に、静粛を支持する競合理論や「公共空間の調整ルール」という別モデルを一度置くと、最終的な立場がさらに強くなる。',
-    steal: '「現在の常識 → 逆の過去 → 複数の転換点 → 理論化 → 現在の症状 → 事実と規範を分離して結論」という型は、そのまま他テーマへ転用できる。'
-  }
-};
-
 init();
 
 async function init() {
@@ -89,7 +78,7 @@ function renderLibrary() {
 
   hero.innerHTML = `
     <header class="library-head">
-      <p class="eyebrow">ANALYSIS LIBRARY</p>
+      <p class="eyebrow">ANALYSIS LIBRARY · ${state.manifest.articles.length} STRUCTURES</p>
       <h1>文章ではなく、<br>論証の骨格を集める。</h1>
       <p>各論考を段落単位のL1〜L5と役割へ抽象化し、「何を言ったか」ではなく「どう組み立てたか」を保存するArchive。</p>
     </header>`;
@@ -101,7 +90,6 @@ function renderLibrary() {
 }
 
 function renderLibraryItem(article) {
-  const tags = (article.tags || []).map(tag => `<span>${esc(tag)}</span>`).join('');
   return `
     <article class="library-item">
       <div class="library-item-top">
@@ -117,8 +105,7 @@ function renderLibraryItem(article) {
         <p>${esc(article.structuralSignature || '')}</p>
       </div>
       ${article.structuralNote ? `<p class="structural-note"><strong>STRUCTURAL NOTE</strong>${esc(article.structuralNote)}</p>` : ''}
-      <div class="library-footer">
-        <div class="library-tags">${tags}</div>
+      <div class="library-footer source-only">
         ${article.source?.url ? `<a href="${attr(article.source.url)}" target="_blank" rel="noreferrer">原文 ↗</a>` : ''}
       </div>
     </article>`;
@@ -156,13 +143,14 @@ function renderHero() {
         <span>${paragraphCount} paragraph units</span>
       </div>
       <p class="thesis">${esc(d.thesis || '')}</p>
+      ${d.structuralSignature ? `<div class="article-signature"><span>STRUCTURAL SIGNATURE</span><p>${esc(d.structuralSignature)}</p></div>` : ''}
       <p class="method-note">原文本文は表示しません。各段落を「そこで何が書かれているか」ではなく、<strong>その段落が論証の中で何をしているか</strong>へ抽象化しています。左のL5ほど抽象、右のL1ほど具体です。</p>
     </header>`;
 }
 
 function renderEvaluation() {
   const d = state.doc;
-  const review = d.evaluation || CURATED_EVALUATIONS[d.id] || inferEvaluation(d);
+  const review = d.structuralReview || d.evaluation || inferEvaluation(d);
   evaluationRoot.innerHTML = `
     <header class="evaluation-head">
       <p class="eyebrow">STRUCTURAL REVIEW</p>
@@ -179,7 +167,7 @@ function renderEvaluation() {
 }
 
 function reviewCard(label, text, className, wide = false) {
-  return `<article class="evaluation-card ${className}${wide ? ' wide' : ''}"><span>${esc(label)}</span><p>${esc(text)}</p></article>`;
+  return `<article class="evaluation-card ${className}${wide ? ' wide' : ''}"><span>${esc(label)}</span><p>${esc(toText(text))}</p></article>`;
 }
 
 function inferEvaluation(doc) {
@@ -245,6 +233,7 @@ function renderParagraph(paragraph, movement) {
           <span class="paragraph-id">${esc(paragraph.id.toUpperCase())}</span>
           <span class="level-chip">L${paragraph.level}</span>
           <span class="role">${esc(paragraph.role)}</span>
+          ${paragraph.roleDetail ? `<span class="role-detail">${esc(paragraph.roleDetail)}</span>` : ''}
         </div>
         <p class="structural-summary">${esc(paragraph.structuralSummary)}</p>
         <span class="movement ${movement.className}">${esc(movement.label)}</span>
@@ -306,9 +295,7 @@ function validateDoc(data) {
     if (!Array.isArray(section.paragraphs)) throw new Error(`${section.id || 'section'} の paragraphs が不正です`);
     for (const paragraph of section.paragraphs) {
       if (!paragraph.id) throw new Error('paragraph id がありません');
-      if (!Number.isInteger(paragraph.level) || paragraph.level < 1 || paragraph.level > 5) {
-        throw new Error(`${paragraph.id} の level は1〜5で指定してください`);
-      }
+      if (!Number.isInteger(paragraph.level) || paragraph.level < 1 || paragraph.level > 5) throw new Error(`${paragraph.id} の level は1〜5で指定してください`);
       if (!paragraph.structuralSummary) throw new Error(`${paragraph.id} の structuralSummary がありません`);
     }
   }
@@ -320,6 +307,10 @@ function showError(error, withBack = false) {
   levelGuide.hidden = true;
   sectionsRoot.innerHTML = '';
   hero.innerHTML = `<div class="error-state"><strong>データを読み込めませんでした。</strong><span>${esc(error.message)}</span>${withBack ? '<a href="#/">← Analysis Library</a>' : ''}</div>`;
+}
+
+function toText(value) {
+  return Array.isArray(value) ? value.join(' / ') : (value || '—');
 }
 
 function esc(value = '') {
