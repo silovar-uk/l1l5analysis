@@ -1,6 +1,6 @@
-# Analysis Prompt — Paragraph Reverse Outline
+# Analysis Prompt — Paragraph Reverse Outline v4
 
-以下を、論考を段落単位のL1〜L5へ抽象化するためのマスタープロンプトとして使用する。
+以下を、論考を段落単位のL1〜L5へ抽象化し、Argument Altitude のAnalysis Libraryへ追加できるArticle JSONを作るためのマスタープロンプトとして使用する。
 
 ---
 
@@ -15,6 +15,8 @@
 - Sentence単位のL判定は出力しない。
 - 原文本文をJSONへ転載しない。
 - `structuralSummary` は内容要約ではなく、論証上の仕事を書く。
+- `structuralSignature` は論考全体の「進み方」を一行で表す。
+- `structuralReview` は採点ではなく、骨格の強み・弱み・転換・改善余地・再利用可能な技法を記述する。
 - L1〜L5は点数ではない。
 - L5が優れ、L1が劣るとは考えない。
 - 典型的Uneven Uへ文章を無理に合わせない。
@@ -38,6 +40,8 @@
 
 ### L5 — HORIZON
 論考全体に関わる一般化、理論、広い含意、価値原則を中心にする。
+
+UIでは **L5が左、L1が右**。左ほど抽象、右ほど具体として表示される。
 
 ## Role
 
@@ -81,6 +85,29 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
 
 つまり、内容ではなく**配置・論証機能**を書く。
 
+## structuralSignature の書き方
+
+論考全体を、テーマ固有の名詞を減らしながら「論証の運動」として一行にする。
+
+例：
+
+`現在の常識 → 逆の過去 → 複線的因果 → 理論化 → 現在の症状 → 規範判断へ戻る`
+
+単なる章タイトル列ではなく、何をどう動かしているかを書く。
+
+## structuralReview
+
+次の6項目を作る。
+
+- overall: 全体構造
+- strengths: 強いところ
+- weakness: 弱いところ
+- turn: 特徴的な転換
+- improvement: 改善余地
+- steal: 盗める構成技法
+
+点数や優劣判定ではなく、説得戦略として分析する。
+
 ## 手順
 
 1. 原文をSectionへ分ける。
@@ -92,15 +119,20 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
 7. `reason` に「なぜそのLevelなのか」を短く書く。
 8. confidenceを high / medium / low で付ける。
 9. Sectionごとに、段落列がどんな論証の流れを作るか `summary` に書く。
-10. 原文本文がJSONに混入していないか監査する。
+10. 論考全体の `thesis` を抽象化する。
+11. `structuralSignature` を作る。
+12. `structuralReview` を作る。
+13. tagsを3〜6個付ける。
+14. 原文本文がJSONに混入していないか監査する。
 
 ## 出力JSON
 
 ```json
 {
-  "schemaVersion": "3.0",
+  "schemaVersion": "4.0",
   "analysisUnit": "paragraph",
   "id": "...",
+  "slug": "...",
   "title": "...",
   "subtitle": "...",
   "source": {
@@ -108,7 +140,18 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
     "publisher": "...",
     "ownership": "external"
   },
+  "analyzedAt": "YYYY-MM-DD",
   "thesis": "論考全体の中心命題を一文で抽象化",
+  "structuralSignature": "現在の常識 → 反例 → 因果 → 理論化 → 現在 → 規範判断",
+  "structuralReview": {
+    "overall": "...",
+    "strengths": "...",
+    "weakness": "...",
+    "turn": "...",
+    "improvement": "...",
+    "steal": "..."
+  },
+  "tags": ["..."],
   "analysisMeta": {
     "method": "Eric Hayot, The Uneven U / Five Levels of Abstraction",
     "status": "paragraph-level reverse outline",
@@ -136,6 +179,30 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
 }
 ```
 
+## Library manifest用の出力
+
+Article JSONの後に、`data/index.json` へ追加できる1件分のmanifest entryも別JSONとして出す。
+
+```json
+{
+  "id": "...",
+  "slug": "...",
+  "dataPath": "./data/articles/<slug>.json",
+  "title": "...",
+  "subtitle": "...",
+  "source": {
+    "url": "...",
+    "publisher": "..."
+  },
+  "analyzedAt": "YYYY-MM-DD",
+  "sectionCount": 0,
+  "paragraphCount": 0,
+  "structuralSignature": "...",
+  "structuralNote": "Library一覧で見せる、この骨格の特徴を一文で",
+  "tags": ["..."]
+}
+```
+
 ## 最終監査
 
 - 原文を長く転載していないか。
@@ -145,6 +212,8 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
 - 全段落をU字へ矯正していないか。
 - 前後Paragraphとの相対関係を見てLevelを決めているか。
 - `reason` が循環説明になっていないか。
+- `structuralSignature` が内容要約ではなく論証の運動になっているか。
+- `structuralReview` が感想や採点ではなく構造分析になっているか。
 
 対象：
 
