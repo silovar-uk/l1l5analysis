@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "4.1",
+  "analysisUnit": "paragraph",
+  "id": "attention-economy-one-minute-190-years",
+  "slug": "attention-economy-one-minute-190-years",
+  "title": "1億人から「1分」ずつ集めると190年になる――アテンションエコノミーを本気で数えてみた",
+  "subtitle": "無料サービスの代金は、本当に0円なのか",
+  "source": {
+    "url": "https://silovar-uk.github.io/myessays/#/essay/attention-economy-one-minute-190-years?lang=ja",
+    "publisher": "MyEssays",
+    "ownership": "owned"
+  },
+  "analyzedAt": "2026-09-13",
+  "thesis": "アテンションエコノミーの問題は単純な「時間の奪取」ではなく、希少な注意が誰の目的に向けて配分され、その配分をどの仕組みが設計しているかとして捉え直す必要がある。",
+  "structuralSignature": "小さな思考実験 → 概念の起源 → 分かりやすい通説 → 一次情報による訂正 → 反証でコスト概念を修正 → 規模の模型化 → 反対側の効用を回収 → 実用的な判断基準 → 冒頭の問いへ戻る",
+  "structuralNote": "一つの批判を押し切らず、調査のたびに自分の説明を壊して精度を上げる「自己訂正」が推進力になっている。",
+  "tags": ["注意", "デジタル", "広告", "調査型エッセイ"],
+  "structuralReview": {
+    "overall": "冒頭の「1分＝小さい」という感覚を最後まで保持しつつ、概念史・企業資料・規制・実験研究を通るたびに初期理解を修正する。一本の主張を証明するより、説明モデルを段階的に精密化する骨格。",
+    "strengths": "反証や都合の悪い研究をTURNとして積極的に使うため、批判ありきに見えにくい。各修正が最終的な「誰の目的へ注意を配るか」という判断軸へ収束する。",
+    "weakness": "中盤は訂正が連続するため、読者が「いま何を訂正しているか」を見失う可能性がある。データ・広告・割り込みという別論点を束ねる中間SYNTHESISをもう一つ置ける。",
+    "turn": "「あなたの注意が売られている」という分かりやすい説明を、企業資料とGoldhaber自身の区別で自ら崩す箇所。ここで記事が告発文から調査型エッセイへ変わる。",
+    "improvement": "第4〜5節の後に、ここまでの訂正を「所有ではなく配分・誘導・最適化の問題」と一度統合すると、後半の規模模型と実用基準への移行がさらに滑らかになる。",
+    "steal": "強い通説を仮説として置く → 一次情報で部分否定する → より地味だが正確なモデルへ更新する、という自己訂正型の論証。"
+  },
+  "sections": [
+    {
+      "id": "s00", "index": "00", "title": "導入 — 1分を歴史の単位へ拡大する", "summary": "極小の時間を人口規模で集計する思考実験から、無料サービスの対価を「円」ではなく「分」で見る問いを立てる。",
+      "paragraphs": [
+        {"id":"p01","level":2,"role":"ENTRY","roleDetail":"EVERYDAY_HOOK","structuralSummary":"日常的に無視できる「1分」を入口にし、読者の身体感覚に論点を接続する。","reason":"具体的な時間感覚を提示して問題へ入るため。","confidence":"high"},
+        {"id":"p02","level":1,"role":"EVIDENCE","roleDetail":"THOUGHT_EXPERIMENT","structuralSummary":"1億人×1分を約190年へ換算し、小さな単位が規模で別物になることを可視化する。","reason":"計算という具体的なモデルが段落の中心だから。","confidence":"high"},
+        {"id":"p03","level":4,"role":"QUESTION","structuralSummary":"無料サービスの対価を金額ではなく時間で見たら何が変わるか、中心問いを設定する。","reason":"記事全体を駆動する問いへ一般化しているため。","confidence":"high"},
+        {"id":"p04","level":4,"role":"QUALIFICATION","roleDetail":"INITIAL_MODEL","structuralSummary":"「SNSが時間を奪う」という初期理解を暫定仮説として置き、これだけでは足りないと予告する。","reason":"以後の調査で修正される説明モデルを明示するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s01", "index": "01", "title": "情報の豊富さから、注意の希少性へ", "summary": "サイモンの議論を使い、情報過多を「情報量」ではなく受け手側の希少資源の問題として定義し直す。",
+      "paragraphs": [
+        {"id":"p05","level":3,"role":"EVIDENCE","roleDetail":"CONCEPT_ORIGIN","structuralSummary":"アテンションエコノミーの起点としてサイモンの問題設定を導入する。","reason":"理論を支える歴史的資料を記事の枠組みに接続するため。","confidence":"high"},
+        {"id":"p06","level":2,"role":"EVIDENCE","roleDetail":"ANALOGY","structuralSummary":"ウサギとレタスの比喩を使い、豊富さが反対側の希少性を生む具体像へ降りる。","reason":"抽象理論を具体的比喩で説明するため。","confidence":"high"},
+        {"id":"p07","level":5,"role":"CLAIM","roleDetail":"SCARCITY_PRINCIPLE","structuralSummary":"情報が増えるほど希少になるのは注意である、という最上位の経済的見取り図を置く。","reason":"個別の比喩を一般原理へ引き上げるため。","confidence":"high"},
+        {"id":"p08","level":4,"role":"SYNTHESIS","structuralSummary":"コンテンツの価格には受け手の時間コストも含まれるという発想へ、冒頭の問いを接続する。","reason":"理論を記事固有の問いへ戻して統合するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s02", "index": "02", "title": "注意が流れるというモデルを置く", "summary": "Goldhaberの議論から、情報と逆方向へ流れる希少資源として注意を捉え、ネット上の力を注意獲得能力として説明する。",
+      "paragraphs": [
+        {"id":"p09","level":4,"role":"BRIDGE","structuralSummary":"サイモンの希少性の議論をインターネット上の交換関係へ移す。","reason":"概念史の二つの段階を接続しているため。","confidence":"high"},
+        {"id":"p10","level":5,"role":"CLAIM","roleDetail":"FLOW_MODEL","structuralSummary":"豊富な情報ではなく希少な注意の獲得能力が力になる、という経済モデルへ上げる。","reason":"特定サービスを越える一般モデルだから。","confidence":"high"},
+        {"id":"p11","level":3,"role":"TURN","roleDetail":"POPULAR_SHORTCUT","structuralSummary":"「無料ならあなたが商品」という強い通俗的説明をあえて置き、次の検証対象にする。","reason":"上位モデルを分かりやすい俗説へ一度下ろし、その妥当性を問い直す転換だから。","confidence":"medium"}
+      ]
+    },
+    {
+      "id": "s03", "index": "03", "title": "「注意が売られる」を一次情報で訂正する", "summary": "企業の収益説明へ降り、実際に売買されるのは表示・クリック・広告機会であることを確認して、注意の商品モデルを修正する。",
+      "paragraphs": [
+        {"id":"p12","level":1,"role":"EVIDENCE","roleDetail":"PRIMARY_SOURCE","structuralSummary":"MetaとAlphabetの収益指標へ降り、実際の取引単位を確認する。","reason":"企業の一次資料と具体的指標が中心だから。","confidence":"high"},
+        {"id":"p13","level":4,"role":"INTERPRETATION","structuralSummary":"注意そのものが直接売買される、という説明を否定し、取引対象を広告機会へ言い換える。","reason":"証拠から説明モデルを修正しているため。","confidence":"high"},
+        {"id":"p14","level":3,"role":"BRIDGE","roleDetail":"MECHANISM","structuralSummary":"人・測定・広告面・反応という事業の連鎖を並べ、注意と収益の間の因果をつなぐ。","reason":"具体的な収益指標と上位概念の間を接続するため。","confidence":"high"},
+        {"id":"p15","level":5,"role":"SYNTHESIS","structuralSummary":"注意を「商品」ではなく広告在庫や反応価値を成立させる前提条件として再定義する。","reason":"複数の一次情報をより広い概念モデルへ統合するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s04", "index": "04", "title": "データ論へ広げ、単純化をもう一度止める", "summary": "「個人データが売られている」という別の単純化も限定しつつ、注意獲得とデータ収集が結びつくと問題がプライバシーと権力へ拡張すると示す。",
+      "paragraphs": [
+        {"id":"p16","level":4,"role":"QUALIFICATION","structuralSummary":"広告モデルをそのまま「個人データ販売」と同一視しないよう、説明範囲を限定する。","reason":"過剰一般化を抑える論証上の制動だから。","confidence":"high"},
+        {"id":"p17","level":1,"role":"EVIDENCE","roleDetail":"REGULATORY_EVIDENCE","structuralSummary":"FTC調査を使い、データ収集・ターゲティング広告・プライバシー懸念の具体的接続を示す。","reason":"公的調査の具体的知見が中心だから。","confidence":"high"},
+        {"id":"p18","level":5,"role":"CLAIM","structuralSummary":"注意の問題を時間量から、行動推定・プライバシー・権力関係の問題へ拡張する。","reason":"個別サービスを越えた社会的含意へ上がるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s05", "index": "05", "title": "都合の悪い研究で「コスト」を修正する", "summary": "割り込みは必ず仕事を遅くするという想定を反証し、コストが時間ではなくストレスや努力へ移る場合があるとモデルを更新する。",
+      "paragraphs": [
+        {"id":"p19","level":4,"role":"CLAIM","roleDetail":"EXPECTED_CLAIM","structuralSummary":"通知や割り込みは生産性を下げるはずだ、という記事側の予想を明示する。","reason":"検証対象となる部分仮説を置くため。","confidence":"high"},
+        {"id":"p20","level":1,"role":"EVIDENCE","roleDetail":"COUNTEREVIDENCE","structuralSummary":"割り込み群がむしろ短時間で課題を終えた実験結果を提示する。","reason":"予想と衝突する具体的研究結果だから。","confidence":"high"},
+        {"id":"p21","level":2,"role":"EVIDENCE","structuralSummary":"速度の裏側でストレス・時間圧・努力感が増えたという追加結果を示す。","reason":"反証を解釈するための具体的な測定結果だから。","confidence":"high"},
+        {"id":"p22","level":4,"role":"SYNTHESIS","structuralSummary":"集中損失のコストは遅延だけでなく、速く処理して帳尻を合わせる負荷にも現れると修正する。","reason":"相反する結果を新しい説明へまとめるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s06", "index": "06", "title": "もう一度、規模の模型へ戻る", "summary": "実測値ではないことを明示したうえで、微小な時間変化が人数・サービス数で巨大化する感度を計算する。",
+      "paragraphs": [
+        {"id":"p23","level":3,"role":"QUALIFICATION","structuralSummary":"1分モデルを実測主張ではなく規模感を見るための模型として位置づけ直す。","reason":"計算の適用範囲を限定するメタ説明だから。","confidence":"high"},
+        {"id":"p24","level":1,"role":"EVIDENCE","roleDetail":"SENSITIVITY_MODEL","structuralSummary":"1億人×1分、複数サービス×5分などの換算で集積効果を具体化する。","reason":"数量計算そのものが中心だから。","confidence":"high"},
+        {"id":"p25","level":5,"role":"CLAIM","structuralSummary":"一人から大量に取らなくても、微小な変化を巨大な人数へ適用すれば総量は大きくなると一般化する。","reason":"個別計算を規模の原理へ引き上げるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s07", "index": "07", "title": "アルゴリズムの反対側の効用を回収する", "summary": "推薦や通知を一括で悪とせず、注意を節約し目的達成を助ける場合を置いて、問題を「誰の成果へ最適化されるか」へ移す。",
+      "paragraphs": [
+        {"id":"p26","level":4,"role":"TURN","structuralSummary":"「レコメンドも通知も悪い」という次の気持ちよい結論を止める。","reason":"批判の向きを反転させる明示的な転換だから。","confidence":"high"},
+        {"id":"p27","level":2,"role":"EVIDENCE","structuralSummary":"検索・商品絞り込み・重要通知など、注意を節約する具体例を置く。","reason":"アルゴリズムの便益を具体ケースで示すため。","confidence":"high"},
+        {"id":"p28","level":4,"role":"INTERPRETATION","structuralSummary":"同じ推薦でも、目的達成を早めるものと滞在を延ばすものを分ける。","reason":"具体例から評価軸を抽出するため。","confidence":"high"},
+        {"id":"p29","level":5,"role":"QUESTION","structuralSummary":"仕組みが誰のどんな結果を最適化しているのか、記事全体を束ねる上位問いへ到達する。","reason":"個別機能を越えた判断原理を問いとして提示するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s08", "index": "08", "title": "スクリーンタイムから「請求書」へ", "summary": "総時間の多寡ではなく、起動契機・目的達成・サービス側と自分側の成果を確認する実用的な監査基準へ落とす。",
+      "paragraphs": [
+        {"id":"p30","level":2,"role":"APPLICATION","roleDetail":"AUDIT_HEURISTIC","structuralSummary":"サービス利用後に確認する三つの問いへ、抽象議論を日常のチェックへ落とす。","reason":"実際に使える具体的な判断手順だから。","confidence":"high"},
+        {"id":"p31","level":4,"role":"INTERPRETATION","structuralSummary":"長時間利用が必ず悪く短時間利用が必ず良いわけではないと、時間量中心の評価を外す。","reason":"具体例から評価軸そのものを修正するため。","confidence":"high"},
+        {"id":"p32","level":5,"role":"CLAIM","structuralSummary":"注意を単なる時間ではなく、自分が何へ向かうかを決める方向性・主体性として定義する。","reason":"記事固有の議論を広い人間行動の命題へ上げるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s09", "index": "09", "title": "1分へ戻り、価値判断を主体性へ置く", "summary": "冒頭の190年へ戻り、問題を巨大な総量ではなく「まあいいか」と見逃される微小単位と、自分で配分を選べる感覚へ収束させる。",
+      "paragraphs": [
+        {"id":"p33","level":3,"role":"RETURN","structuralSummary":"冒頭の1分＝190年へ戻り、同じ数字の意味を調査後の視点で読み直す。","reason":"導入の具体例を結論へ再接続するため。","confidence":"high"},
+        {"id":"p34","level":4,"role":"INTERPRETATION","structuralSummary":"巨大な問題が「まあいいか」と判断される微小単位の集積で成立する点を核心として取り出す。","reason":"具体計算から社会的な認知構造を解釈するため。","confidence":"high"},
+        {"id":"p35","level":5,"role":"CONCLUSION","structuralSummary":"注意を誰にも渡さないことではなく、自分が渡したい対象へ自分で配分できることを最終原則として残す。","reason":"記事全体の調査を価値判断の最上位命題へまとめるため。","confidence":"high"}
+      ]
+    }
+  ]
+}
