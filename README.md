@@ -1,31 +1,57 @@
-# Argument Altitude — Paragraph Reverse Outline
+# Argument Altitude — Analysis Library
 
-Eric Hayot の **The Uneven U / Five Levels of Abstraction** を参考に、論考の各段落を「主要な抽象度」と「論証上の役割」で再構成するための静的Webツール。
+Eric Hayot の **The Uneven U / Five Levels of Abstraction** を参考に、論考を「本文」ではなく **段落単位の論証構造** として保存・閲覧する静的Webツール。
 
-## v3 の思想
+## 現在の思想
 
-- 分析単位は **SentenceではなくParagraph**
+- ホームは **Analysis Library**
+- Library → Article → Section → Paragraph の階層
+- 分析単位は Sentence ではなく **Paragraph**
 - 原文本文は表示しない
 - 各段落を `L1〜L5 / Role / Structural Summary / Why` に抽象化する
-- L1ほど具体、L5ほど抽象
-- 抽象度はグラフではなく **左→右のインデント** で見せる
-- 段落をクリックしたときだけ判定理由を開く
-- 「何が書いてあるか」ではなく「その段落が論証の中で何をしているか」を残す
+- **L5が左、L1が右**
+- 左ほど抽象、右ほど具体
+- 折れ線グラフではなく、インデントそのものを抽象度として使う
+- 記事一覧では内容要約より `Structural Signature` を重視する
+- 記事ページでは `Structural Review` で骨格の強み・弱み・転換・改善余地・盗める構成技法を見る
 
-## Data schema
-
-`data/demo.json` は schemaVersion 3.0。
+## Information architecture
 
 ```text
-Document
-└ Section
-   └ Paragraph
-      ├ level: 1..5
-      ├ role
-      ├ structuralSummary
-      ├ reason
-      └ confidence
+Analysis Library
+└ Article
+   ├ Structural Review
+   └ Section
+      └ Paragraph
+         ├ level: 1..5
+         ├ role
+         ├ structuralSummary
+         ├ reason
+         └ confidence
 ```
+
+## Data
+
+- `data/index.json` — Library用の軽量manifest
+- `data/demo.json` — 現在のseed article
+
+Libraryはmanifestだけを先に読み、記事を開いたときだけ各article JSONを取得する。
+
+## Routing
+
+- `#/` — Analysis Library
+- `#/article/<slug>` — Article view
+
+GitHub Pagesでリロード問題を起こしにくいHash Routingを採用。
+
+## Level orientation
+
+```text
+抽象                                      具体
+L5 HORIZON → L4 CLAIM → L3 BRIDGE → L2 SCENE → L1 GROUND
+```
+
+Level番号の意味は変えず、表示位置だけをこの向きで統一する。
 
 外部著作物の原文本文はpublic repoへ保存せず、URLと構造分析だけを保持する。
 
