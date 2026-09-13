@@ -1,48 +1,44 @@
 # Argument Altitude — Analysis Library
 
-Eric Hayot の **The Uneven U / Five Levels of Abstraction** を参考に、論考を「本文」ではなく **段落単位の論証構造** として保存・閲覧する静的Webツール。
+Eric Hayot の **The Uneven U / Five Levels of Abstraction** を参考に、論考を「本文」ではなく **段落単位の論証構造** として保存し、最終的には書くときに構造を再利用するための静的Webツール。
 
-## 現在の思想
+## 現在地
 
+- 4論考 / 130 paragraph units を校正済み
 - ホームは **Analysis Library**
-- Library → Article → Section → Paragraph の階層
-- 分析単位は Sentence ではなく **Paragraph**
+- Library → Article → Section → Paragraph
 - 原文本文は表示しない
-- 各段落を `L1〜L5 / Role / Structural Summary / Why` に抽象化する
-- **L5が左、L1が右**
-- 左ほど抽象、右ほど具体
-- 折れ線グラフではなく、インデントそのものを抽象度として使う
-- 記事一覧では内容要約より `Structural Signature` を重視する
-- 記事ページでは `Structural Review` で骨格の強み・弱み・転換・改善余地・盗める構成技法を見る
+- **L5が左、L1が右**。左ほど抽象、右ほど具体
+- 一覧では `Structural Signature` と `Structural Note` を主役にする
+- Topic Tagsはdataには残すが、構造選択に効かなかったためLibraryでは非表示
+- Articleでは `Structural Review` とParagraph Reverse Outlineを見る
+- Roleは12種類のCore Roleへ正規化し、固有差は `roleDetail` に保持する
 
-## Information architecture
+## Core Role
 
-```text
-Analysis Library
-└ Article
-   ├ Structural Review
-   └ Section
-      └ Paragraph
-         ├ level: 1..5
-         ├ role
-         ├ structuralSummary
-         ├ reason
-         └ confidence
-```
+`ENTRY / QUESTION / EVIDENCE / INTERPRETATION / BRIDGE / CLAIM / TURN / QUALIFICATION / APPLICATION / SYNTHESIS / RETURN / CONCLUSION`
+
+詳細は `ROLE_INVENTORY.md`。
 
 ## Data
 
-- `data/index.json` — Library用の軽量manifest
-- `data/demo.json` — 現在のseed article
+- `data/index.json` — Library manifest
+- `data/demo.json` — Cinema analysis
+- `data/articles/attention-economy-one-minute-190-years.json`
+- `data/articles/outcome-before-task-issue-setting.json`
+- `data/articles/duck-hunt-choose-your-game.json`
 
-Libraryはmanifestだけを先に読み、記事を開いたときだけ各article JSONを取得する。
+## Calibration docs
+
+- `ROLE_INVENTORY.md` — Core Role体系と頻度
+- `LEVEL_CALIBRATION.md` — L1〜L5の境界ルール
+- `CALIBRATION_NOTES.md` — 4論考を入れて分かったこと
+- `UX_REVIEW.md` — Library / Article UIの実測レビュー
 
 ## Routing
 
 - `#/` — Analysis Library
-- `#/article/<slug>` — Article view
-
-GitHub Pagesでリロード問題を起こしにくいHash Routingを採用。
+- `#/article/<slug>` — Article
 
 ## Level orientation
 
@@ -51,9 +47,13 @@ GitHub Pagesでリロード問題を起こしにくいHash Routingを採用。
 L5 HORIZON → L4 CLAIM → L3 BRIDGE → L2 SCENE → L1 GROUND
 ```
 
-Level番号の意味は変えず、表示位置だけをこの向きで統一する。
+## Product direction
 
-外部著作物の原文本文はpublic repoへ保存せず、URLと構造分析だけを保持する。
+実データを増やした結果、最も強い方向は **「読むためのArchive」より「書くときに構造を盗めるTool」**。
+
+次候補は `STRUCTURE RECIPE / USE THIS STRUCTURE`。検索・比較・Archetype分類より先に、1本の論考からテーマを抜いた再利用可能な構成手順を取り出せるかを検証する。
+
+外部著作物の原文本文はpublic repoへ保存せず、URLと構造分析のみ保持する。
 
 ## Deploy
 
