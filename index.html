@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f6f4ee" />
+  <meta name="description" content="論考をL1〜L5に分解し、結論がどのように作られたかまで保存するAnalysis Archive。" />
+  <title>L1–L5 Analysis Archive</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <header class="site-header">
+    <a class="brand" href="#/" aria-label="L1–L5 Analysis Archive ホーム">
+      <span class="brand-mark" aria-hidden="true">L1—5</span>
+      <span class="brand-copy">Analysis Archive</span>
+    </a>
+    <div class="header-actions">
+      <button class="ghost-button" id="xray-toggle" type="button" aria-pressed="false" hidden>
+        <span class="status-dot" aria-hidden="true"></span>
+        X-RAY
+      </button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1"></main>
+
+  <aside class="drawer" id="source-drawer" aria-hidden="true" aria-labelledby="source-drawer-title">
+    <div class="drawer-backdrop" data-close-drawer></div>
+    <section class="drawer-panel" role="dialog" aria-modal="true">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow">SOURCE</p>
+          <h2 id="source-drawer-title">根拠を見る</h2>
+        </div>
+        <button class="icon-button" type="button" aria-label="閉じる" data-close-drawer>×</button>
+      </div>
+      <div id="source-drawer-body"></div>
+    </section>
+  </aside>
+
+  <aside class="drawer mri-drawer" id="mri-drawer" aria-hidden="true" aria-labelledby="mri-drawer-title">
+    <div class="drawer-backdrop" data-close-mri></div>
+    <section class="drawer-panel drawer-panel-wide" role="dialog" aria-modal="true">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow">ARGUMENT MRI</p>
+          <h2 id="mri-drawer-title">論証トレース</h2>
+        </div>
+        <button class="icon-button" type="button" aria-label="閉じる" data-close-mri>×</button>
+      </div>
+      <div id="mri-drawer-body"></div>
+    </section>
+  </aside>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
