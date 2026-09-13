@@ -6,7 +6,8 @@ const state = {
   route: 'library',
   activeSectionId: null,
   activeParagraphId: null,
-  sectionObserver: null
+  sectionObserver: null,
+  mapObserver: null
 };
 
 const hero = document.querySelector('#hero');
@@ -18,6 +19,7 @@ const importBtn = document.querySelector('#importBtn');
 const exportBtn = document.querySelector('#exportBtn');
 const importFile = document.querySelector('#importFile');
 const toolsMenu = document.querySelector('.tools-menu');
+const mapReturn = document.querySelector('#mapReturn');
 
 const LEVELS = [
   { level: 5, name: 'HORIZON', ja: '理論・広い含意' },
@@ -26,6 +28,21 @@ const LEVELS = [
   { level: 2, name: 'SCENE', ja: '具体説明・背景' },
   { level: 1, name: 'GROUND', ja: '証拠・個別事実' }
 ];
+
+const ROLE_SHORT = {
+  ENTRY: 'ENTRY',
+  QUESTION: 'Q',
+  EVIDENCE: 'EVID',
+  INTERPRETATION: 'INTERP',
+  BRIDGE: 'BRIDGE',
+  CLAIM: 'CLAIM',
+  TURN: 'TURN',
+  QUALIFICATION: 'QUAL',
+  APPLICATION: 'APPLY',
+  SYNTHESIS: 'SYNTH',
+  RETURN: 'RETURN',
+  CONCLUSION: 'CONCL'
+};
 
 init();
 
@@ -46,11 +63,12 @@ function bindGlobal() {
   importBtn.addEventListener('click', () => importFile.click());
   importFile.addEventListener('change', importAnalysis);
   exportBtn.addEventListener('click', exportAnalysis);
+  mapReturn.addEventListener('click', scrollToMap);
   window.addEventListener('hashchange', route);
 }
 
 async function route() {
-  disconnectArticleObserver();
+  disconnectArticleObservers();
   const match = location.hash.match(/^#\/article\/([^/?#]+)/);
 
   if (!match) {
@@ -91,6 +109,7 @@ function renderLibrary() {
   structureMapRoot.hidden = true;
   structureSummaryRoot.hidden = true;
   evaluationRoot.hidden = true;
+  mapReturn.hidden = true;
 
   hero.innerHTML = `
     <header class="library-head compact">
@@ -104,7 +123,7 @@ function renderLibrary() {
   const articles = getSortedArticles();
   sectionsRoot.innerHTML = `
     <section class="library-list" aria-label="最近の分析">
-      ${articles.map((article, index) => renderLibraryItem(article, index)).join('')}
+      ${articles.map(renderLibraryItem).join('')}
     </section>`;
 }
 
@@ -114,22 +133,27 @@ function getSortedArticles() {
   });
 }
 
-function renderLibraryItem(article, index) {
-  const number = String(index + 1).padStart(2, '0');
+function renderLibraryItem(article) {
+  const date = formatAnalyzedAt(article.analyzedAt);
+  const kicker = [date, article.sectionCount ? `${article.sectionCount} SECTIONS` : ''].filter(Boolean).join(' · ');
   return `
     <article class="library-row">
       <a class="library-row-main" href="#/article/${encodeURIComponent(article.slug)}">
-        <span class="library-row-index">${number}</span>
         <span class="library-row-copy">
-          <span class="library-row-kicker">${esc(article.sectionCount)} SECTIONS · ${esc(article.paragraphCount)} UNITS</span>
+          ${kicker ? `<span class="library-row-kicker">${esc(kicker)}</span>` : ''}
           <strong class="library-row-title">${esc(article.title)}</strong>
-          ${article.subtitle ? `<span class="library-row-subtitle">${esc(article.subtitle)}</span>` : ''}
           <span class="library-row-signature">${esc(article.structuralSignature || '')}</span>
         </span>
         <span class="library-row-arrow" aria-hidden="true">→</span>
       </a>
       ${article.source?.url ? `<a class="library-row-source" href="${attr(article.source.url)}" target="_blank" rel="noreferrer">原文 ↗</a>` : ''}
     </article>`;
+}
+
+function formatAnalyzedAt(value) {
+  if (!value) return '';
+  const date = String(value).slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date.replaceAll('-', '.') : date;
 }
 
 function renderArticle() {
@@ -139,6 +163,7 @@ function renderArticle() {
   structureMapRoot.hidden = false;
   structureSummaryRoot.hidden = false;
   evaluationRoot.hidden = false;
+  mapReturn.hidden = true;
 
   renderHero();
   renderStructureMap();
@@ -147,6 +172,7 @@ function renderArticle() {
   renderEvaluation();
   bindArticleInteractions();
   observeSections();
+  observeMapVisibility();
 }
 
 function renderHero() {
@@ -185,6 +211,7 @@ function renderStructureMap() {
         <h2>文章全体の動き</h2>
       </div>
       <div class="map-axis" aria-label="左が抽象、右が具体"><span>抽象</span><span>具体</span></div>
+      <span class="map-scroll-hint" aria-hidden="true">横に見る →</span>
     </header>
     <div class="map-scroll" tabindex="0" aria-label="L5からL1へ並ぶ構造マップ">
       <div class="map-grid">
@@ -201,12 +228,17 @@ function renderMapSection(section) {
   const cells = LEVELS.map(item => renderMapCell(section, item.level)).join('');
   return `
     <div class="map-row" data-section-id="${attr(section.id)}">
-      <button class="map-section-link" type="button" data-scroll-section="${attr(section.id)}">
+      <button class="map-section-link" type="button" data-scroll-section="${attr(section.id)}" title="${attr(section.title)}">
         <span>${esc(section.index)}</span>
-        <strong>${esc(section.title)}</strong>
+        <strong>${esc(shortSectionTitle(section.title))}</strong>
       </button>
       ${cells}
     </div>`;
+}
+
+function shortSectionTitle(title = '') {
+  const first = String(title).split(/\s+[—–-]\s+/)[0].trim();
+  return first.length > 24 ? `${first.slice(0, 23)}…` : first;
 }
 
 function renderMapCell(section, level) {
@@ -218,12 +250,16 @@ function renderMapCell(section, level) {
 }
 
 function renderMapPoint(paragraph) {
-  const label = `L${paragraph.level} ${paragraph.role || ''} ${paragraph.structuralSummary || ''}`;
+  const role = paragraph.role || '';
+  const label = `${paragraph.id.toUpperCase()} L${paragraph.level} ${role} ${paragraph.structuralSummary || ''}`;
   return `
     <button class="map-point" type="button" data-scroll-paragraph="${attr(paragraph.id)}" aria-label="${attr(label)}" title="${attr(paragraph.structuralSummary || '')}">
-      <span class="map-point-id">${esc(paragraph.id.toUpperCase())}</span>
-      <span class="map-point-role">${esc(paragraph.role || '')}</span>
+      <span class="map-point-role">${esc(shortRole(role))}</span>
     </button>`;
+}
+
+function shortRole(role = '') {
+  return ROLE_SHORT[role] || role.slice(0, 6) || '—';
 }
 
 function renderStructureSummary() {
@@ -374,10 +410,14 @@ function scrollToReview() {
   evaluationRoot.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
 }
 
+function scrollToMap() {
+  structureMapRoot.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+}
+
 function observeSections() {
-  disconnectArticleObserver();
+  if (!('IntersectionObserver' in window)) return;
   const sections = [...document.querySelectorAll('.section-block')];
-  if (!sections.length || !('IntersectionObserver' in window)) return;
+  if (!sections.length) return;
 
   state.sectionObserver = new IntersectionObserver(entries => {
     const visible = entries
@@ -392,6 +432,29 @@ function observeSections() {
   sections.forEach(section => state.sectionObserver.observe(section));
 }
 
+function observeMapVisibility() {
+  if (!('IntersectionObserver' in window)) return;
+
+  state.mapObserver = new IntersectionObserver(entries => {
+    const entry = entries[0];
+    if (!entry || state.route !== 'article') {
+      mapReturn.hidden = true;
+      return;
+    }
+    mapReturn.hidden = entry.isIntersecting || entry.boundingClientRect.top >= 0;
+  }, {
+    rootMargin: `-${getHeaderHeight()}px 0px 0px 0px`,
+    threshold: 0
+  });
+
+  state.mapObserver.observe(structureMapRoot);
+}
+
+function getHeaderHeight() {
+  const value = getComputedStyle(document.documentElement).getPropertyValue('--header');
+  return Number.parseInt(value, 10) || 58;
+}
+
 function setActiveSection(id) {
   state.activeSectionId = id;
   document.querySelectorAll('.map-row').forEach(row => {
@@ -399,11 +462,16 @@ function setActiveSection(id) {
   });
 }
 
-function disconnectArticleObserver() {
+function disconnectArticleObservers() {
   if (state.sectionObserver) {
     state.sectionObserver.disconnect();
     state.sectionObserver = null;
   }
+  if (state.mapObserver) {
+    state.mapObserver.disconnect();
+    state.mapObserver = null;
+  }
+  mapReturn.hidden = true;
 }
 
 async function importAnalysis() {
@@ -412,7 +480,7 @@ async function importAnalysis() {
   try {
     const data = JSON.parse(await file.text());
     validateDoc(data);
-    disconnectArticleObserver();
+    disconnectArticleObservers();
     state.doc = data;
     state.route = 'article';
     renderArticle();
@@ -469,7 +537,7 @@ function validateDoc(data) {
 }
 
 function showError(error, withBack = false) {
-  disconnectArticleObserver();
+  disconnectArticleObservers();
   document.title = 'Error — Argument Altitude';
   document.body.dataset.view = 'error';
   structureMapRoot.hidden = true;
