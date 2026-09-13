@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "2.0",
+  "id": "cinema-manners-intro",
+  "title": "声はどのように映画館から駆逐されたか",
+  "source": {
+    "url": "https://myym34443.hatenadiary.jp/entry/2026/09/10/225753",
+    "publisher": "勘違い",
+    "ownership": "external",
+    "note": "公開デモでは検索結果から確認できる導入部のみを短く収録。全文分析はローカルImportを前提とする。"
+  },
+  "analysisMeta": {
+    "method": "Eric Hayot, The Uneven U / Five Levels of Abstraction",
+    "status": "seed-demo",
+    "reviewed": true,
+    "note": "L1〜L5は精密測定ではなく、証拠からの距離を示す相対的な仮説。"
+  },
+  "paragraphs": [
+    {
+      "id": "p01",
+      "label": "導入：読者との距離を縮める",
+      "pattern": "ASCENDING_INTRO",
+      "sentences": [
+        {"id":"p01-s01","text":"こんにちは。","level":2,"alternativeLevel":null,"confidence":"high","function":"TRANSITION","movement":"PLATEAU","reason":"論証そのものではなく、読者との接点を作る発話。具体的な発話場面に近い。","provenance":"HUMAN"},
+        {"id":"p01-s02","text":"みなさん、映画館に行っていますか？","level":2,"alternativeLevel":3,"confidence":"medium","function":"DESCRIPTION","movement":"PLATEAU","reason":"読者の具体的経験を呼び出し、議論の場面を設定している。","provenance":"HUMAN"},
+        {"id":"p01-s03","text":"いいですよね、映画館。","level":2,"alternativeLevel":null,"confidence":"high","function":"DESCRIPTION","movement":"PLATEAU","reason":"具体的な共有経験に留まり、まだ一般命題を提示していない。","provenance":"HUMAN"},
+        {"id":"p01-s04","text":"ちなみに値段は毎秒上がっていて、来年は1人6500円になります。","level":2,"alternativeLevel":1,"confidence":"medium","function":"DESCRIPTION","movement":"PLATEAU","reason":"ジョークを伴う具体的な状況提示。証拠ではないためL1よりL2寄り。","provenance":"HUMAN"}
+      ]
+    },
+    {
+      "id": "p02",
+      "label": "導入：問題の場を設定する",
+      "pattern": "ASCENT",
+      "sentences": [
+        {"id":"p02-s01","text":"さて、Twitterなどでは大作映画の公開など、ことあるごとに「映画館内マナー」について盛り上がります。","level":2,"alternativeLevel":3,"confidence":"high","function":"DESCRIPTION","movement":"ASCENT","reason":"現在の具体的な言説状況を示し、論点を導入する。","provenance":"HUMAN"},
+        {"id":"p02-s02","text":"ぼくの立場としては、穏健に言えば「みんなが他者を思いやって過ごしましょう。そのなかには許しあうことも含みますよ」という感じです。","level":4,"alternativeLevel":3,"confidence":"medium","function":"CLAIM","movement":"ASCENT","reason":"具体例から離れ、映画館マナーについての著者の立場を一般化して提示する。","provenance":"HUMAN"},
+        {"id":"p02-s03","text":"本音としては「シネマトグラフの空間として映画館は存在しており、それは他者との場であり、常に衝突と譲歩が共存する場であるべき」となります。","level":5,"alternativeLevel":4,"confidence":"medium","function":"CLAIM","movement":"ASCENT","reason":"個別の映画館マナーを超え、公共空間と他者性についての広い規範命題へ進んでいる。","provenance":"HUMAN"},
+        {"id":"p02-s04","text":"言い換えですね。","level":3,"alternativeLevel":null,"confidence":"medium","function":"SYNTHESIS","movement":"DESCENT","reason":"直前の抽象命題を、前の立場表明との関係として整理するメタ発話。","provenance":"HUMAN"},
+        {"id":"p02-s05","text":"ぼくのスタンスについてはいまは措いておきます。","level":3,"alternativeLevel":null,"confidence":"high","function":"TRANSITION","movement":"PLATEAU","reason":"立場表明から歴史的検討へ移るための構成上の橋。","provenance":"HUMAN"}
+      ]
+    },
+    {
+      "id": "p03",
+      "label": "校正用サンプル：Uneven U",
+      "pattern": "PRODUCTIVE_U",
+      "synthetic": true,
+      "sentences": [
+        {"id":"p03-s01","text":"映画館の静粛性は、単なるマナーではなく、特定の鑑賞様式を前提とした規範として考える必要がある。","level":4,"alternativeLevel":null,"confidence":"high","function":"CLAIM","movement":"DESCENT","reason":"段落の中心となる部分命題。","provenance":"HUMAN"},
+        {"id":"p03-s02","text":"その規範がいつ成立したかを見るには、上映空間の歴史的変化を確認する必要がある。","level":3,"alternativeLevel":null,"confidence":"high","function":"BRIDGE","movement":"DESCENT","reason":"抽象的主張から、検証対象となる具体的歴史へ橋をかける。","provenance":"HUMAN"},
+        {"id":"p03-s03","text":"初期の上映では、映像に弁士の語りや生演奏が重ねられることが珍しくなかった。","level":2,"alternativeLevel":1,"confidence":"high","function":"DESCRIPTION","movement":"DESCENT","reason":"歴史的状況の具体的な説明。","provenance":"HUMAN"},
+        {"id":"p03-s04","text":"つまり、上映空間は最初から無音を前提としていたわけではない。","level":3,"alternativeLevel":null,"confidence":"high","function":"INTERPRETATION","movement":"ASCENT","reason":"具体的記述から一段上の解釈を引き出す。","provenance":"HUMAN"},
+        {"id":"p03-s05","text":"静粛性は映画というメディアの自然な属性ではなく、歴史的に形成された鑑賞条件として捉え直せる。","level":5,"alternativeLevel":4,"confidence":"high","function":"CONCLUSION","movement":"ASCENT","reason":"具体例を、より広い歴史的・理論的含意へ引き上げる。","provenance":"HUMAN"}
+      ]
+    }
+  ]
+}
