@@ -1,4 +1,4 @@
-# Analysis Prompt — Paragraph Reverse Outline v4
+# Analysis Prompt — Paragraph Reverse Outline v4.1
 
 以下を、論考を段落単位のL1〜L5へ抽象化し、Argument Altitude のAnalysis Libraryへ追加できるArticle JSONを作るためのマスタープロンプトとして使用する。
 
@@ -11,89 +11,93 @@
 
 ## 最重要原則
 
-- 分析単位はParagraph。
-- Sentence単位のL判定は出力しない。
+- 分析単位はParagraph。Sentence単位のL判定は出力しない。
 - 原文本文をJSONへ転載しない。
 - `structuralSummary` は内容要約ではなく、論証上の仕事を書く。
 - `structuralSignature` は論考全体の「進み方」を一行で表す。
-- `structuralReview` は採点ではなく、骨格の強み・弱み・転換・改善余地・再利用可能な技法を記述する。
-- L1〜L5は点数ではない。
-- L5が優れ、L1が劣るとは考えない。
+- `structuralReview` は採点ではなく、骨格の強み・弱み・転換・改善余地・再利用可能な技法を書く。
+- L1〜L5は点数ではない。L5が優れ、L1が劣るとは考えない。
 - 典型的Uneven Uへ文章を無理に合わせない。
-- 難しい語彙の量ではなく、証拠・個別事実からの距離で判定する。
-- 段落内に複数の抽象度があっても、その段落の主要な重心を `level` にする。
-- 判定が混在する場合は `secondaryLevel` を任意で使ってよい。
+- 難しい語彙ではなく、証拠からの距離と**その段落が束ねる範囲**でLevelを判断する。
+- UIは L5=左=抽象 / L1=右=具体。
 
-## Levelの作業定義
+## Level
 
 ### L1 — GROUND
-最も具体的。直接引用、個別データ、個別史料、作品の具体箇所などを段落の中心に据える。
+直接引用、数値、個別研究結果、仕様、史料など。最も証拠に近い。
 
 ### L2 — SCENE
-具体的な背景・描写・制度・事例の説明を中心にする。
+具体例、状況、背景、操作を説明する。特定ケースに近い。
 
 ### L3 — BRIDGE
-具体例の解釈、複数事例の整理、具体と抽象の橋渡しを中心にする。
+具体と抽象の間を動く。証拠を意味づける、概念を接続する、上位主張を具体へ戻す。
 
 ### L4 — CLAIM
-部分命題、問題設定、節の主張、因果説明の主要な枠組みを中心にする。
+そのSection・局所論証を支配する部分命題、因果モデル、判断枠。
 
 ### L5 — HORIZON
-論考全体に関わる一般化、理論、広い含意、価値原則を中心にする。
+複数SectionまたはDocument全体を束ねる問い、理論、価値原則、再利用可能な最上位命題。
 
-UIでは **L5が左、L1が右**。左ほど抽象、右ほど具体として表示される。
+### 境界ルール
 
-## Role
+- L3 vs L4: 「つなぐ」が中心ならL3。「ここから先を支配する主張」ならL4。
+- L4 vs L5: Section内の中核ならL4。複数Sectionを束ねる／別テーマへ移植可能ならL5。
+- L2 vs L3: 例そのものを説明するならL2。その例の意味を抽出すればL3。
 
-RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で追加する。
+理論名が出たからL5、数字が出たからL1、結論だからL5、という自動判定は禁止。
+
+## Core Role
+
+`role` は必ず次の12種類から選ぶ。
 
 - ENTRY
-- POSITION
 - QUESTION
-- COUNTEREXAMPLE
-- HISTORICAL_DETAIL
+- EVIDENCE
 - INTERPRETATION
+- BRIDGE
+- CLAIM
 - TURN
-- CAUSAL_BRIDGE
-- SUBCLAIM
-- CASE
-- INSTITUTIONAL_DETAIL
-- THEORY
-- LOCALIZATION
-- SYNTHESIS
-- HISTORICAL_TURN
-- INFRASTRUCTURE
-- CAUSAL_CLAIM
-- PRESENT_SYMPTOM
-- COUNTERCASE
-- RESET
-- PRINCIPLE
 - QUALIFICATION
-- ETHICAL_CLAIM
+- APPLICATION
+- SYNTHESIS
 - RETURN
-- OPEN_END
+- CONCLUSION
 
-## structuralSummary の書き方
+テーマ固有のニュアンスはRoleを増やさず、任意の `roleDetail` に置く。
+
+例：
+
+- `EVIDENCE / COUNTEREXAMPLE`
+- `EVIDENCE / HISTORICAL_DETAIL`
+- `TURN / RESET`
+- `CLAIM / THEORY`
+- `APPLICATION / TEMPLATE`
+
+Roleは「何について書いているか」ではなく「論証上なにをしているか」で決める。LevelとRoleは固定対応させない。
+
+## structuralSummary
 
 悪い例：
+
 - 「トーキーについて説明する」
 - 「映画館マナーについて述べる」
 
 良い例：
+
 - 「技術変化を、静粛規範成立の第一の転換点として配置する」
-- 「現在の不満言説を、強い静粛規範が可視化された症状として読み替える」
+- 「現在の不満言説を、強い規範が可視化された症状として読み替える」
 
-つまり、内容ではなく**配置・論証機能**を書く。
+内容ではなく**配置・論証機能**を書く。
 
-## structuralSignature の書き方
+## structuralSignature
 
-論考全体を、テーマ固有の名詞を減らしながら「論証の運動」として一行にする。
+テーマ固有語を可能な限り減らし、論考全体の運動を書く。
 
 例：
 
-`現在の常識 → 逆の過去 → 複線的因果 → 理論化 → 現在の症状 → 規範判断へ戻る`
+`現在の常識 → 逆の過去 → 複線的因果 → 理論化 → 現在へ回帰 → 規範判断`
 
-単なる章タイトル列ではなく、何をどう動かしているかを書く。
+タイトルを隠しても「どんな説得の仕方か」が区別できる粒度にする。
 
 ## structuralReview
 
@@ -104,32 +108,28 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
 - weakness: 弱いところ
 - turn: 特徴的な転換
 - improvement: 改善余地
-- steal: 盗める構成技法
-
-点数や優劣判定ではなく、説得戦略として分析する。
+- steal: 別テーマへ盗める構成技法
 
 ## 手順
 
 1. 原文をSectionへ分ける。
-2. 原文のParagraph境界を確認する。
-3. 各Paragraphの中心的な仕事を一文で抽象化する。
-4. Paragraphの主要な抽象度をL1〜L5で仮置きする。
-5. 前後Paragraphとの関係を見てLevelを再検討する。
-6. Roleを付ける。
-7. `reason` に「なぜそのLevelなのか」を短く書く。
+2. Paragraph境界と、必要なら複数の短い段落を一つの論証単位として扱うか確認する。
+3. 各Paragraph Unitの中心的な仕事を一文で抽象化する。
+4. Levelを仮置きする。
+5. 前後Paragraphと、そのParagraphが束ねる範囲を見てLevelを再検討する。
+6. Core Roleを付け、必要なら `roleDetail` を追加する。
+7. `reason` にLevel判定理由を書く。
 8. confidenceを high / medium / low で付ける。
-9. Sectionごとに、段落列がどんな論証の流れを作るか `summary` に書く。
-10. 論考全体の `thesis` を抽象化する。
-11. `structuralSignature` を作る。
-12. `structuralReview` を作る。
-13. tagsを3〜6個付ける。
-14. 原文本文がJSONに混入していないか監査する。
+9. Sectionごとの論証上の仕事を `summary` に書く。
+10. `thesis`、`structuralSignature`、`structuralReview` を作る。
+11. tagsはデータ用に3〜6個付ける。Library UIの主役にはしない。
+12. 原文本文がJSONへ混入していないか監査する。
 
-## 出力JSON
+## Article JSON
 
 ```json
 {
-  "schemaVersion": "4.0",
+  "schemaVersion": "4.1",
   "analysisUnit": "paragraph",
   "id": "...",
   "slug": "...",
@@ -138,11 +138,12 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
   "source": {
     "url": "...",
     "publisher": "...",
-    "ownership": "external"
+    "ownership": "owned | licensed | external"
   },
   "analyzedAt": "YYYY-MM-DD",
-  "thesis": "論考全体の中心命題を一文で抽象化",
-  "structuralSignature": "現在の常識 → 反例 → 因果 → 理論化 → 現在 → 規範判断",
+  "thesis": "...",
+  "structuralSignature": "... → ... → ...",
+  "structuralNote": "Library用に、この骨格の妙を一文で",
   "structuralReview": {
     "overall": "...",
     "strengths": "...",
@@ -152,25 +153,21 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
     "steal": "..."
   },
   "tags": ["..."],
-  "analysisMeta": {
-    "method": "Eric Hayot, The Uneven U / Five Levels of Abstraction",
-    "status": "paragraph-level reverse outline",
-    "note": "原文本文は保持しない"
-  },
   "sections": [
     {
       "id": "s00",
       "index": "00",
-      "title": "節の構造的タイトル",
-      "summary": "この節全体が論証上なにをしているか",
+      "title": "構造的な節タイトル",
+      "summary": "この節が論証上なにをしているか",
       "paragraphs": [
         {
           "id": "p01",
           "level": 4,
           "secondaryLevel": 3,
-          "role": "QUESTION",
-          "structuralSummary": "この段落が論証上なにをしているか",
-          "reason": "なぜ主要LevelがL4なのか",
+          "role": "CLAIM",
+          "roleDetail": "SUBCLAIM",
+          "structuralSummary": "...",
+          "reason": "...",
           "confidence": "high"
         }
       ]
@@ -179,9 +176,9 @@ RoleはLevelとは別軸。必要に応じて次から選ぶか、同粒度で�
 }
 ```
 
-## Library manifest用の出力
+## Manifest entry
 
-Article JSONの後に、`data/index.json` へ追加できる1件分のmanifest entryも別JSONとして出す。
+Article JSONの後に、`data/index.json` へ追加できる1件も出す。
 
 ```json
 {
@@ -190,15 +187,12 @@ Article JSONの後に、`data/index.json` へ追加できる1件分のmanifest e
   "dataPath": "./data/articles/<slug>.json",
   "title": "...",
   "subtitle": "...",
-  "source": {
-    "url": "...",
-    "publisher": "..."
-  },
+  "source": {"url": "...", "publisher": "..."},
   "analyzedAt": "YYYY-MM-DD",
   "sectionCount": 0,
   "paragraphCount": 0,
   "structuralSignature": "...",
-  "structuralNote": "Library一覧で見せる、この骨格の特徴を一文で",
+  "structuralNote": "...",
   "tags": ["..."]
 }
 ```
@@ -206,14 +200,15 @@ Article JSONの後に、`data/index.json` へ追加できる1件分のmanifest e
 ## 最終監査
 
 - 原文を長く転載していないか。
-- `structuralSummary` が単なる内容要約になっていないか。
-- ParagraphをSentence単位へ分解していないか。
+- `structuralSummary` が内容要約になっていないか。
+- Roleを12種類の外へ増やしていないか。
+- テーマ固有差を必要に応じて `roleDetail` に逃がしたか。
 - L5を高評価扱いしていないか。
 - 全段落をU字へ矯正していないか。
-- 前後Paragraphとの相対関係を見てLevelを決めているか。
+- L3/L4/L5を「束ねる範囲」で再確認したか。
 - `reason` が循環説明になっていないか。
-- `structuralSignature` が内容要約ではなく論証の運動になっているか。
-- `structuralReview` が感想や採点ではなく構造分析になっているか。
+- `structuralSignature` がタイトルを隠しても構造差を残すか。
+- `structuralReview.steal` が別テーマへ移植可能か。
 
 対象：
 
