@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "4.1",
+  "analysisUnit": "paragraph",
+  "id": "duck-hunt-choose-your-game",
+  "slug": "duck-hunt-choose-your-game",
+  "title": "自分は、どういうゲームをしたいのか――ダックハントでカンと一緒に動く",
+  "subtitle": "技を当てる前に、盤面と読み合いそのものを自分の得意な形へ変える",
+  "source": {
+    "url": "https://silovar-uk.github.io/myessays/#/essay/duck-hunt-choose-your-game?lang=ja",
+    "publisher": "MyEssays",
+    "ownership": "owned"
+  },
+  "analyzedAt": "2026-09-13",
+  "thesis": "個々の技を当てることより、自分とカンの位置関係・相手の選択肢・意図の見え方を設計し、自分が得意な「小さなゲーム」を試合内に繰り返し作ることがダックハントの戦略になる。",
+  "structuralSignature": "奇妙な使用感 → 道具の再定義 → 操作上の誤解を訂正 → 本体と道具を一体化 → 外部理論で読み合いを抽象化 → ランダムとの違いを限定 → 「何を当てるか」から「どんなゲームを作るか」へ上位化 → 振り返り指標へ落とす → 一つの練習ルールで閉じる",
+  "structuralNote": "一つのキャラクター技術から始まり、位置関係→欺瞞→ゲーム理論→メタゲーム設計へ段階的に抽象度を上げ、最後は練習行動へ戻る。",
+  "tags": ["ゲーム", "戦略", "意思決定", "実践"],
+  "structuralReview": {
+    "overall": "具体的な「空き缶」の操作感から出発し、技の目的を命中から盤面設計へ再定義する。その後スポーツ心理学とゲーム理論で読み合いを抽象化し、最終的に「自分はどんなゲームを作るか」というメタ戦略へ上がってから、練習ルールへ戻る上昇型の骨格。",
+    "strengths": "抽象概念を外部理論から先に持ち込まず、プレイ中の違和感を十分に具体化してから理論へ接続するため、理論が後付けの装飾になりにくい。最後も具体的な一つの行動へ戻る。",
+    "weakness": "中盤のDeceptionとMixed Strategyは近い目的を別理論で説明するため、役割が重なって見える。両者の差を「情報を隠す技法」と「選択分布の設計」としてより強く分けられる。",
+    "turn": "「カンを当てる」から「カンがあることで相手に何を考えさせるか」へ目的関数を変える序盤の再定義。この転換が後半のメタ戦略をすべて可能にする。",
+    "improvement": "外部理論を二つ置いた後に、両方が「相手の予測確度を下げ、自分の得意な状況を増やす」という同じ上位原理へどう統合されるか、L4のSYNTHESISを一つ追加すると後半へより自然につながる。",
+    "steal": "具体的なコツ → コツが効く理由 → 別領域の理論 → より大きな戦略原理 → 明日の一行ルール、という「実践から理論へ上がってまた実践へ戻る」型。"
+  },
+  "sections": [
+    {
+      "id": "s00", "index": "00", "title": "導入 — 空き缶を見ている違和感から始める", "summary": "キャラクター本体よりカンを見ている奇妙さを入口に、カンを命中させる道具から試合の形を変える装置へ再定義する。",
+      "paragraphs": [
+        {"id":"p01","level":2,"role":"ENTRY","structuralSummary":"犬より空き缶を見ている時間が長いというプレイ中の奇妙な実感を入口にする。","reason":"具体的な体験から問題へ入るため。","confidence":"high"},
+        {"id":"p02","level":4,"role":"INTERPRETATION","structuralSummary":"カンは当てる飛び道具ではなくゲームの形を変えるものではないか、と道具の役割を再定義する。","reason":"具体的な使用感から部分命題を引き出すため。","confidence":"high"},
+        {"id":"p03","level":5,"role":"QUESTION","structuralSummary":"技の選択より前に「自分はこの試合でどういうゲームをしたいか」を中心問いとして置く。","reason":"個別技術を越えて試合設計全体へ問いを上げるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s01", "index": "01", "title": "カンを「弾」から「盤面の問題」へ変える", "summary": "公式仕様とキャラクター特性から、カンを一発の攻撃ではなく残存する盤面要素として捉え、相手の選択肢を変える価値を示す。",
+      "paragraphs": [
+        {"id":"p04","level":1,"role":"EVIDENCE","structuralSummary":"Trick Shotの仕様と公式Tipsを使い、カンが継続的に位置を変えられる要素だと確認する。","reason":"ゲーム内仕様という直接的な具体情報だから。","confidence":"high"},
+        {"id":"p05","level":3,"role":"INTERPRETATION","structuralSummary":"一発の弾ではなく、盤面に残る動かせる障害物としてカンを読み替える。","reason":"仕様から戦術的意味を抽出するため。","confidence":"high"},
+        {"id":"p06","level":2,"role":"EVIDENCE","structuralSummary":"相手がジャンプ・シールド・回避など別の選択を迫られる具体的状況を並べる。","reason":"カンが存在することで変わる行動を具体化するため。","confidence":"high"},
+        {"id":"p07","level":4,"role":"SYNTHESIS","structuralSummary":"カンの価値を命中率ではなく、相手が解くべき問題を増やすこととしてまとめる。","reason":"複数の具体的選択肢変化を一つの戦術命題へ統合するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s02", "index": "02", "title": "位置を変え、次の向きを選べる盤面を作る", "summary": "「反対側へ回れば自動的に強い」という自分の直感を仕様確認で修正し、位置取りの価値を次のカン方向を選べることへ置き直す。",
+      "paragraphs": [
+        {"id":"p08","level":2,"role":"APPLICATION","structuralSummary":"カンを出したら自分も動き、同じ位置に固まらないという実践ルールを置く。","reason":"具体的な操作・位置取りの指針だから。","confidence":"high"},
+        {"id":"p09","level":1,"role":"EVIDENCE","structuralSummary":"本体が反対側へ移動しただけでは射撃方向が自動反転しない仕様を確認する。","reason":"誤解を訂正する直接的なゲーム仕様だから。","confidence":"high"},
+        {"id":"p10","level":3,"role":"INTERPRETATION","structuralSummary":"反対側へ回る価値を、自動的な強さではなく次の進行方向を選べる配置づくりとして修正する。","reason":"仕様の訂正から戦術的意味を再構成するため。","confidence":"high"},
+        {"id":"p11","level":4,"role":"CLAIM","structuralSummary":"重要なのは操作手順そのものより、本体・カン・相手の位置関係であると焦点を上げる。","reason":"具体操作から戦術設計の部分命題へ上がるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s03", "index": "03", "title": "本体とカンを別々の時間にしない", "summary": "カン操作と本体行動を順番に処理する発想を捨て、二つが同時に意味を変え合う一つのシステムとして扱う。",
+      "paragraphs": [
+        {"id":"p12","level":2,"role":"ENTRY","structuralSummary":"カンを操作してから本体で攻める、という初心者的な時間分割を具体的に示す。","reason":"改善対象となる実際の行動パターンを置くため。","confidence":"high"},
+        {"id":"p13","level":3,"role":"INTERPRETATION","structuralSummary":"カン操作中にも本体が別の仕事をする状態を、強い形として抽出する。","reason":"具体的行動の同時性を戦術概念へまとめるため。","confidence":"high"},
+        {"id":"p14","level":4,"role":"SYNTHESIS","structuralSummary":"本体とカンが互いの意味を変える一つのキャラクターとして扱う、と統合する。","reason":"二つの操作系列を一つの戦術単位へまとめるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s04", "index": "04", "title": "狙いを一つに見せない", "summary": "同じ動きに複数の意味を持たせる発想を、スポーツのDeception研究へ接続し、相手が意図を確定する時点を遅らせる原理へ上げる。",
+      "paragraphs": [
+        {"id":"p15","level":2,"role":"EVIDENCE","structuralSummary":"前進という一つの動きが接近・カン操作・回避待ちなど複数目的に見える具体例を置く。","reason":"戦術的曖昧さを具体的な行動で示すため。","confidence":"high"},
+        {"id":"p16","level":3,"role":"BRIDGE","structuralSummary":"スポーツ心理学のDeception概念を導入し、ゲーム内の読み合いを別領域の理論へ接続する。","reason":"具体的なプレイ感と一般的な対人認知理論の橋だから。","confidence":"high"},
+        {"id":"p17","level":5,"role":"CLAIM","structuralSummary":"目的を隠す本質を、相手が意図を確定できる時間を遅らせることとして一般化する。","reason":"特定ゲームを越えた対人戦略原理へ上げるため。","confidence":"high"},
+        {"id":"p18","level":4,"role":"SYNTHESIS","structuralSummary":"一つの動きから複数の目的が成立する状態を、実戦で目指す中間原理としてまとめる。","reason":"最上位原理をゲーム内で操作可能な戦術命題へ戻すため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s05", "index": "05", "title": "ランダムではなく、読まれきらない", "summary": "意図を隠すことを無目的なランダム行動と区別し、Mixed Strategyから「自分には目的があるが相手には確定しない」状態を説明する。",
+      "paragraphs": [
+        {"id":"p19","level":4,"role":"QUALIFICATION","structuralSummary":"狙いを隠すことと、自分自身も無目的になることを切り分ける。","reason":"直前の主張が誤解される範囲を限定するため。","confidence":"high"},
+        {"id":"p20","level":3,"role":"BRIDGE","structuralSummary":"Mixed Strategyを導入し、読み合いの不確実性をゲーム理論の語彙へ接続する。","reason":"実践感覚と理論概念の橋渡しだから。","confidence":"high"},
+        {"id":"p21","level":5,"role":"CLAIM","structuralSummary":"理想を「自分には狙いがあるが、相手から次の選択は確定しない状態」として一般化する。","reason":"個別技から独立した戦略原理へ上がるため。","confidence":"high"},
+        {"id":"p22","level":4,"role":"SYNTHESIS","structuralSummary":"「狙いは強く持つ。ただし狙いだけは見せない」という実戦向けの短い原則へ圧縮する。","reason":"上位原理を操作可能な戦術命題へ戻すため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s06", "index": "06", "title": "技選択から「ゲーム設計」へ上がる", "summary": "相手に何をさせるかより前に、自分が繰り返したい状況を定義し、技をそのゲームを作る手段へ格下げする。",
+      "paragraphs": [
+        {"id":"p23","level":5,"role":"RETURN","structuralSummary":"導入の「どんなゲームをしたいか」という問いへ戻り、ここまでの理論を集約する。","reason":"冒頭の最上位問いを中盤の知見で再訪するため。","confidence":"high"},
+        {"id":"p24","level":2,"role":"APPLICATION","structuralSummary":"位置分散・地上移動への圧力・シールド・カン処理後など、作りたいゲームを複数の具体像へ落とす。","reason":"上位問いを実戦可能な状況設計へ変えるため。","confidence":"high"},
+        {"id":"p25","level":4,"role":"INTERPRETATION","structuralSummary":"技を先に選ぶのではなく、作りたいゲームを決めてから必要な技を選ぶと順序を逆転する。","reason":"複数の具体例から意思決定の順序原理を抽出するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s07", "index": "07", "title": "得意な小さなゲームを反復する", "summary": "競技全体のルールは変えられなくても、何を繰り返し判断させるかは設計できるとし、キャラクター熟練を「再現したい状況を知ること」と再定義する。",
+      "paragraphs": [
+        {"id":"p26","level":3,"role":"BRIDGE","structuralSummary":"接近・崖・飛び道具など、各プレイヤーが得意な局面を競技全体の中の「小さなゲーム」として捉える。","reason":"個別戦術からメタゲーム設計へつなぐ中間概念だから。","confidence":"high"},
+        {"id":"p27","level":5,"role":"CLAIM","structuralSummary":"大きなゲームの中に自分が得意な小さなゲームを作り、それを繰り返すことを上位戦略として提示する。","reason":"特定技を越えた競技戦略の一般命題だから。","confidence":"high"},
+        {"id":"p28","level":4,"role":"INTERPRETATION","structuralSummary":"キャラクターを使えるとは、コンボ知識だけでなく繰り返したい状況を知ることだと熟練概念を更新する。","reason":"上位原理をキャラクター習熟の定義へ適用しているため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s08", "index": "08", "title": "振り返り指標を「自分のゲーム」に変える", "summary": "勝敗や技の成功だけを見る振り返りから、自分が望む状況をどれだけ作れたかを先に見るレビュー方法へ移す。",
+      "paragraphs": [
+        {"id":"p29","level":2,"role":"APPLICATION","structuralSummary":"リプレイで確認する具体的な位置取り・選択肢・意図のチェック項目を並べる。","reason":"戦略を振り返り行動へ落とすため。","confidence":"high"},
+        {"id":"p30","level":4,"role":"INTERPRETATION","structuralSummary":"勝敗と「自分のゲームを作れたか」を分離し、後者を改善可能性の指標として扱う。","reason":"具体的チェックを学習上の評価原理へ上げるため。","confidence":"high"},
+        {"id":"p31","level":5,"role":"CLAIM","structuralSummary":"結果だけでなく、自分が再現したいゲーム状態をどれだけ作れたかを見ることを学習の上位指標にする。","reason":"個別試合を越えた練習原理へ一般化するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s09", "index": "09", "title": "最後は一つの行動へ戻る", "summary": "大きな戦略論を「カンを出したら自分も動く」という一つの練習ルールへ圧縮し、試合前の問いと具体操作を接続して閉じる。",
+      "paragraphs": [
+        {"id":"p32","level":2,"role":"APPLICATION","structuralSummary":"次の対戦では一つだけ実行する、という最小練習単位へ落とす。","reason":"すぐ試せる具体行動が中心だから。","confidence":"high"},
+        {"id":"p33","level":3,"role":"SYNTHESIS","structuralSummary":"位置を分ける・複数の見え方を作る・ゲームを選ぶ、という学習ステップを段階化する。","reason":"記事全体の原理を実践順序へまとめるため。","confidence":"high"},
+        {"id":"p34","level":5,"role":"RETURN","structuralSummary":"「今日はどういうゲームをしたい？」という冒頭の問いを試合前の最上位判断へ戻す。","reason":"導入の問いを最終的な意思決定ルールとして再利用するため。","confidence":"high"},
+        {"id":"p35","level":4,"role":"CONCLUSION","structuralSummary":"ダックハントを空き缶を飛ばすキャラクターではなく、空き缶で自分のゲームを盤面に作るキャラクターとして再定義して閉じる。","reason":"抽象原理を対象固有の新しい見方へ着地させるため。","confidence":"high"}
+      ]
+    }
+  ]
+}
