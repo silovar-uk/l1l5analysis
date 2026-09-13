@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "articles": [
+    {
+      "id": "cinema-manners-outline",
+      "slug": "cinema-manners-outline",
+      "dataPath": "./data/demo.json",
+      "title": "声はどのように映画館から駆逐されたか",
+      "subtitle": "映画館マナーの歴史に向けて",
+      "source": {
+        "url": "https://myym34443.hatenadiary.jp/entry/2026/09/10/225753",
+        "publisher": "勘違い"
+      },
+      "analyzedAt": "2026-09-13",
+      "sectionCount": 5,
+      "paragraphCount": 28,
+      "structuralSignature": "現在の常識 → 逆の過去 → 技術・制度・環境による複線的因果 → 理論化 → 現在の症状 → 規範判断へ戻る",
+      "structuralNote": "現在の違和感を入口にしてから歴史へ後退するため、読者の問題意識を保ったまま長い因果説明へ移れる骨格。",
+      "tags": ["映画", "公共空間", "規範", "系譜学"]
+    }
+  ]
+}
