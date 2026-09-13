@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "4.1",
+  "analysisUnit": "paragraph",
+  "id": "outcome-before-task-issue-setting",
+  "slug": "outcome-before-task-issue-setting",
+  "title": "「片づけをする」は、目標ではなかった――達成すべき状態を先に決める",
+  "subtitle": "目標・イシュー・タスクを分けると、仕事の輪郭が変わる",
+  "source": {
+    "url": "https://silovar-uk.github.io/myessays/#/essay/outcome-before-task-issue-setting?lang=ja",
+    "publisher": "MyEssays",
+    "ownership": "owned"
+  },
+  "analyzedAt": "2026-09-13",
+  "thesis": "仕事では最初に行為をタスク化するのではなく、達成された状態を定義し、未知の問いをイシューとして分け、その後に実行タスクを置く方が、解くべき問題と成功条件を保ちやすい。",
+  "structuralSignature": "身近な失敗 → 初期仮説 → 研究による支持 → 反証で条件を追加 → 概念を三分割 → 同じ例で再構成 → 複数の実務例へ展開 → 四行テンプレへ圧縮 → 問題設定の原理へ一般化 → 冒頭の失敗へ戻る",
+  "structuralNote": "主張を一直線に押すのでなく、反例で条件を付けた後に概念を分解し、最後はそのまま使える操作手順へ圧縮する。",
+  "tags": ["仕事", "問題設定", "目標", "実務"],
+  "structuralReview": {
+    "overall": "「片づけ」という小さな失敗から始まり、目標設定研究で仮説を支えた直後に複雑課題の反例で修正し、Goal / Issue / Taskという概念分解を経て実務テンプレへ落とす。問題発見から手順化までが一続き。",
+    "strengths": "冒頭の例を途中で何度も使い直すため、抽象理論が浮きにくい。反証を入れたことで「具体的目標を立てればよい」という安易なハウツーを避け、適用条件まで提示できている。",
+    "weakness": "Goal Setting TheoryとIssue Treeは学術的・実務的な出自が異なるため、両者を一つのフレームへ統合する論理はやや編集的。L3のBRIDGEをもう一段明示すると概念接続が強くなる。",
+    "turn": "複雑課題ではOutcome GoalよりLearning Goalが有効になり得る研究を置く箇所。最初の主張が条件付きへ変わり、その後の概念分解に必要な余白が生まれる。",
+    "improvement": "Goal / Issue / Taskの三分割を導入する直前に「目標の種類」と「解くべき問い」が別軸であることを一文のモデルとして置くと、研究パートと実務パートの接続がさらに明確になる。",
+    "steal": "身近な失敗を一つ選ぶ → 研究で仮説を支える → 反証で適用条件を狭める → 概念を分解する → 同じ失敗を新モデルで解き直す → テンプレにする、という実務記事の型。"
+  },
+  "sections": [
+    {
+      "id": "s00", "index": "00", "title": "導入 — 動詞だけのToDoを疑う", "summary": "「片づけたのに仕事がしにくい」という失敗から、行為の実施と成果の達成が別物だと気づき、終了状態を先に決める仮説を立てる。",
+      "paragraphs": [
+        {"id":"p01","level":2,"role":"ENTRY","structuralSummary":"「片づけをする」という普通のToDoを、誰でも分かる失敗例として置く。","reason":"日常の具体的行為から論点を開始するため。","confidence":"high"},
+        {"id":"p02","level":2,"role":"EVIDENCE","roleDetail":"FAILURE_CASE","structuralSummary":"片づけを実行しても必要資料が見つからない状況を置き、行為完了と成果のズレを具体化する。","reason":"失敗の観察が中心だから。","confidence":"high"},
+        {"id":"p03","level":4,"role":"INTERPRETATION","structuralSummary":"動詞だけの指示には成功条件が含まれていない、と失敗の原因を抽出する。","reason":"具体例から一般的な問題構造を取り出すため。","confidence":"high"},
+        {"id":"p04","level":5,"role":"QUESTION","structuralSummary":"仕事は「何をするか」より「何が達成されたら終わりか」を先に決めるべきか、上位の問いを立てる。","reason":"個別の片づけを越えて仕事設計一般へ問いを広げるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s01", "index": "01", "title": "具体的な目標は行動の判定基準になる", "summary": "Goal Setting Theoryを使い、具体的な目標が曖昧な努力指示より行動を選別しやすくすることを示す。",
+      "paragraphs": [
+        {"id":"p05","level":3,"role":"BRIDGE","structuralSummary":"目標設定研究を導入し、日常の違和感を既存研究で検証する段階へ移す。","reason":"体験的仮説と研究知見を接続するため。","confidence":"high"},
+        {"id":"p06","level":1,"role":"EVIDENCE","structuralSummary":"具体的で難しい目標が曖昧な指示より成果を高めやすい研究知見を置く。","reason":"個別研究の結果が段落の中心だから。","confidence":"high"},
+        {"id":"p07","level":2,"role":"APPLICATION","structuralSummary":"片づけを具体的な終了条件へ書き換え、行動の選別が可能になる様子を示す。","reason":"理論を具体ケースへ適用しているため。","confidence":"high"},
+        {"id":"p08","level":4,"role":"SYNTHESIS","structuralSummary":"目標をやる気の言葉ではなく、行動を選ぶ判定基準として再定義する。","reason":"研究と例を部分命題へ統合するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s02", "index": "02", "title": "反証 — 複雑な仕事では成果目標が邪魔になる", "summary": "複雑課題ではLearning Goalが優位になる研究を置き、「終了状態を具体化すればよい」という初期仮説に条件を加える。",
+      "paragraphs": [
+        {"id":"p09","level":4,"role":"TURN","structuralSummary":"初期仮説に都合の悪いケースがあると宣言し、議論の方向を一度反転する。","reason":"主張を条件付きへ修正する明示的な転換だから。","confidence":"high"},
+        {"id":"p10","level":1,"role":"EVIDENCE","roleDetail":"COUNTEREVIDENCE","structuralSummary":"単純課題と複雑課題でOutcome GoalとLearning Goalの効果が異なる研究結果を置く。","reason":"比較実験の具体的結果が中心だから。","confidence":"high"},
+        {"id":"p11","level":3,"role":"INTERPRETATION","structuralSummary":"やり方が未知なら、成果そのものではなく有効な方法の発見を達成対象にすべきと読み替える。","reason":"反証から適用条件を抽出するため。","confidence":"high"},
+        {"id":"p12","level":5,"role":"QUALIFICATION","structuralSummary":"目標設定とは数字を置くことではなく、仕事の不確実性に合わせて目標の種類を選ぶことまで含むと一般化する。","reason":"記事全体の主張を条件付きの上位原則へ修正するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s03", "index": "03", "title": "Goal / Issue / Taskを切り分ける", "summary": "「達成すべき状態」と「解くべき問い」を混同しないため、Goal・Issue・Taskを異なる機能として定義する。",
+      "paragraphs": [
+        {"id":"p13","level":3,"role":"BRIDGE","structuralSummary":"Goalの研究からIssue Treeの概念へ移り、同じ仕事設計の中で位置関係を整理する。","reason":"別由来の概念体系を接続するため。","confidence":"medium"},
+        {"id":"p14","level":2,"role":"EVIDENCE","structuralSummary":"来場者数の目標と、増加を阻む要因を特定する問いを対比して違いを具体化する。","reason":"抽象概念を対照例で説明するため。","confidence":"high"},
+        {"id":"p15","level":5,"role":"SYNTHESIS","structuralSummary":"Goal＝行き先、Issue＝解くべき問い、Task＝行為という三層モデルへ圧縮する。","reason":"複数概念を再利用可能な一般モデルへ統合するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s04", "index": "04", "title": "同じ片づけを新モデルで解き直す", "summary": "冒頭の例へ戻り、Task / Goal / Issueを別々に書くことで、診断工程を飛ばしたことが問題だったと示す。",
+      "paragraphs": [
+        {"id":"p16","level":3,"role":"RETURN","structuralSummary":"冒頭の片づけへ戻り、新しい三層モデルで同じ事例を再分析する。","reason":"導入の具体例を理論導入後に再利用するため。","confidence":"high"},
+        {"id":"p17","level":2,"role":"APPLICATION","structuralSummary":"片づけをTask・Goal・Issueへ具体的に分割し、それぞれの違いを操作可能な形で示す。","reason":"モデルを具体例へ適用する段落だから。","confidence":"high"},
+        {"id":"p18","level":4,"role":"INTERPRETATION","structuralSummary":"タスクを先に置くと、本来診断すべき問いを解決済みとして扱ってしまうと問題の核心を抽出する。","reason":"具体的な分解から実務上の危険を部分命題へ上げるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s05", "index": "05", "title": "複数の仕事へ一般化する", "summary": "SNS・会議・英語学習へ同じ変換を適用し、「動詞で始まる仕事」が成功条件を隠すというパターンを確かめる。",
+      "paragraphs": [
+        {"id":"p19","level":2,"role":"APPLICATION","structuralSummary":"SNS強化をOutcomeとIssueへ分解し、曖昧な動詞を具体的状態と問いへ変える。","reason":"一般モデルを別の具体ケースへ適用するため。","confidence":"high"},
+        {"id":"p20","level":2,"role":"APPLICATION","structuralSummary":"会議改善を終了状態と阻害要因の問いへ分け、同じ操作の再現性を示す。","reason":"第二の具体ケースでモデルを反復するため。","confidence":"high"},
+        {"id":"p21","level":2,"role":"APPLICATION","structuralSummary":"英語学習では未知能力ゆえLearning Goalが適する場合を示し、前半の反証を実務へ回収する。","reason":"研究で追加した条件を具体ケースへ適用しているため。","confidence":"high"},
+        {"id":"p22","level":4,"role":"SYNTHESIS","structuralSummary":"「する・改善する・強化する・検討する」という動詞が成功条件を隠す、と複数例を一つの警戒ルールへまとめる。","reason":"反復例から共通パターンを抽出するため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s06", "index": "06", "title": "四行の「終了画面」へ圧縮する", "summary": "ここまでの議論をOutcome / Evidence / Issue / Taskの四行テンプレへ落とし、タスクを最後に置く操作手順へ変換する。",
+      "paragraphs": [
+        {"id":"p23","level":4,"role":"CLAIM","structuralSummary":"仕事開始前に「終了画面」を書く、という実務ルールを提示する。","reason":"記事の議論を実践可能な部分命題へ変えるため。","confidence":"high"},
+        {"id":"p24","level":2,"role":"APPLICATION","roleDetail":"TEMPLATE","structuralSummary":"Outcome・Evidence・Issue・Taskの四項目を具体的な来場促進案件で例示する。","reason":"テンプレの使い方を具体ケースで見せるため。","confidence":"high"},
+        {"id":"p25","level":5,"role":"SYNTHESIS","structuralSummary":"タスクは最初ではなく、望む状態と未知の問いを定義した後に出てくるという順序原理へまとめる。","reason":"テンプレを仕事設計一般の原則へ引き上げるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s07", "index": "07", "title": "問題の言い方が解法を閉じる", "summary": "Problem Reframingへ接続し、動詞でタスク化すること自体が解決策を先取りし、別の可能性を消すと一般化する。",
+      "paragraphs": [
+        {"id":"p26","level":3,"role":"BRIDGE","structuralSummary":"Problem Reframingの議論を導入し、タスク先行の問題を問題設定論へ接続する。","reason":"実務テンプレをより広い問題解決概念へ橋渡しするため。","confidence":"high"},
+        {"id":"p27","level":2,"role":"EVIDENCE","structuralSummary":"片づけ・広告・イベントという動詞が、それぞれ解決策を先に固定する例を並べる。","reason":"一般化を支える具体的対比例だから。","confidence":"high"},
+        {"id":"p28","level":5,"role":"CLAIM","structuralSummary":"動詞には仕事を進める感覚と引き換えに問いを閉じる力がある、と最上位の問題設定原理へ上げる。","reason":"個別のタスク管理を越えてフレーミング一般へ広げるため。","confidence":"high"}
+      ]
+    },
+    {
+      "id": "s08", "index": "08", "title": "Doneの定義へ戻る", "summary": "冒頭の「片づけ」をもう一度振り返り、成果フェーズか学習フェーズかを見極めたうえで、ToDoより先にDoneを定義する結論へ戻る。",
+      "paragraphs": [
+        {"id":"p29","level":3,"role":"RETURN","structuralSummary":"最初の「達成すべきことがすべて」という仮説へ戻り、調査後の条件付き理解へ更新する。","reason":"記事冒頭の仮説を再検討する回帰だから。","confidence":"high"},
+        {"id":"p30","level":4,"role":"SYNTHESIS","structuralSummary":"成果を出す仕事か方法を見つける仕事かを先に判定し、その後Goal / Issue / Taskを分ける手順に統合する。","reason":"各節の知見を一つの実務フローへまとめるため。","confidence":"high"},
+        {"id":"p31","level":2,"role":"RETURN","structuralSummary":"「片づけをする」という最初のToDoを、何ができるようになりたいかという具体的状態へ戻して読み替える。","reason":"導入の具体例へ最終的に着地するため。","confidence":"high"},
+        {"id":"p32","level":5,"role":"CONCLUSION","structuralSummary":"仕事の最初に書くべきものはToDoではなくDoneの定義であり、それが不要な仕事まで消すと結論づける。","reason":"全体を再利用可能な仕事設計原理として閉じるため。","confidence":"high"}
+      ]
+    }
+  ]
+}
