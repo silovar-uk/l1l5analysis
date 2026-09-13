@@ -1,59 +1,51 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#f6f4ee" />
-  <meta name="description" content="論考をL1〜L5に分解し、結論がどのように作られたかまで保存するAnalysis Archive。" />
-  <title>L1–L5 Analysis Archive</title>
-  <link rel="stylesheet" href="./styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f3ec">
+<title>Argument Altitude — L1–L5</title>
+<link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main">本文へ移動</a>
-  <header class="site-header">
-    <a class="brand" href="#/" aria-label="L1–L5 Analysis Archive ホーム">
-      <span class="brand-mark" aria-hidden="true">L1—5</span>
-      <span class="brand-copy">Analysis Archive</span>
-    </a>
-    <div class="header-actions">
-      <button class="ghost-button" id="xray-toggle" type="button" aria-pressed="false" hidden>
-        <span class="status-dot" aria-hidden="true"></span>
-        X-RAY
-      </button>
+<a class="skip" href="#reader">本文へ</a>
+<header class="topbar">
+  <a class="brand" href="#">Argument Altitude</a>
+  <nav class="mode-switch" aria-label="表示モード">
+    <button data-mode="read" class="active">READ</button>
+    <button data-mode="levels">LEVELS</button>
+    <button data-mode="map">MAP</button>
+  </nav>
+  <button id="reviewBtn" class="review-btn">REVIEW <span id="reviewCount">0</span></button>
+</header>
+<section class="terrain-shell" aria-label="論証地形">
+  <div class="terrain-labels"><span>L5 抽象</span><span>L1 具体</span></div>
+  <svg id="terrain" viewBox="0 0 1000 96" preserveAspectRatio="none" role="img" aria-label="全文のL1からL5の推移"></svg>
+  <div id="terrainTip" class="terrain-tip" hidden></div>
+</section>
+<main class="workspace">
+  <section class="reader-pane" id="reader"></section>
+  <aside class="inspector" id="inspector" aria-live="polite">
+    <div class="empty-inspector">
+      <p class="eyebrow">SENTENCE INSPECTOR</p>
+      <h2>文を選ぶ</h2>
+      <p>文章中の文、または波形の点を選ぶと、L1〜L5の判定理由を確認・修正できます。</p>
     </div>
-  </header>
-
-  <main id="main" tabindex="-1"></main>
-
-  <aside class="drawer" id="source-drawer" aria-hidden="true" aria-labelledby="source-drawer-title">
-    <div class="drawer-backdrop" data-close-drawer></div>
-    <section class="drawer-panel" role="dialog" aria-modal="true">
-      <div class="drawer-head">
-        <div>
-          <p class="eyebrow">SOURCE</p>
-          <h2 id="source-drawer-title">根拠を見る</h2>
-        </div>
-        <button class="icon-button" type="button" aria-label="閉じる" data-close-drawer>×</button>
-      </div>
-      <div id="source-drawer-body"></div>
-    </section>
   </aside>
-
-  <aside class="drawer mri-drawer" id="mri-drawer" aria-hidden="true" aria-labelledby="mri-drawer-title">
-    <div class="drawer-backdrop" data-close-mri></div>
-    <section class="drawer-panel drawer-panel-wide" role="dialog" aria-modal="true">
-      <div class="drawer-head">
-        <div>
-          <p class="eyebrow">ARGUMENT MRI</p>
-          <h2 id="mri-drawer-title">論証トレース</h2>
-        </div>
-        <button class="icon-button" type="button" aria-label="閉じる" data-close-mri>×</button>
-      </div>
-      <div id="mri-drawer-body"></div>
-    </section>
-  </aside>
-
-  <script type="module" src="./app.js"></script>
-  <script src="./nav-fix.js"></script>
+</main>
+<section class="map-view" id="mapView" hidden>
+  <header><p class="eyebrow">SMALL MULTIPLES</p><h2>段落を、同じ高度で比べる</h2><p>すべてL1〜L5固定軸。U字に近いかではなく、段落ごとの動きの違いを見る。</p></header>
+  <div id="multiples" class="multiples"></div>
+</section>
+<div class="review-sheet" id="reviewSheet" aria-hidden="true">
+  <div class="review-backdrop" data-review-close></div>
+  <section class="review-panel">
+    <button class="close" data-review-close>×</button>
+    <p class="eyebrow">REVIEW QUEUE</p>
+    <h2>読み直し候補だけを見る</h2>
+    <div id="reviewBody"></div>
+  </section>
+</div>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
