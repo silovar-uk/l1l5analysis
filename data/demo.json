@@ -1,7 +1,8 @@
 {
-  "schemaVersion": "3.0",
+  "schemaVersion": "4.1",
   "analysisUnit": "paragraph",
   "id": "cinema-manners-outline",
+  "slug": "cinema-manners-outline",
   "title": "声はどのように映画館から駆逐されたか",
   "subtitle": "映画館マナーの歴史に向けて",
   "source": {
@@ -9,79 +10,76 @@
     "publisher": "勘違い",
     "ownership": "external"
   },
+  "analyzedAt": "2026-09-13",
   "thesis": "映画館の静粛は自然な前提ではなく、作品観・興行制度・設備・観客自身の欲望が重なって歴史的に形成された規範として捉え直される。",
+  "structuralSignature": "現在の常識 → 逆の過去 → 技術・制度・環境による複線的因果 → 理論化 → 現在の症状 → 規範判断へ戻る",
+  "structuralNote": "現在の違和感を入口にしてから歴史へ後退するため、読者の問題意識を保ったまま長い因果説明へ移れる骨格。",
+  "tags": ["映画", "公共空間", "規範", "系譜学"],
+  "structuralReview": {
+    "overall": "現在の「当たり前」をいったん壊し、歴史的な反例と複数の転換点を積み上げ、最後に価値判断へ戻る。脱自然化のための系譜学的な骨格がかなり明確。",
+    "strengths": "各節が「具体へ降りる → 解釈する → 上位命題へ戻る」を反復しており、事例紹介だけで終わりにくい。節ごとの役割も、反例・制度・環境・規範ときれいに分かれている。",
+    "weakness": "因果の橋が細い箇所がある。特に「時間・身体の規律 → 静粛」と「シネコンの高品質化 → マナー厳格化」は、骨格上はL3の橋渡しをもう一段厚くできる。",
+    "turn": "最も効いている転換は終盤のRESET。歴史的に作られた規範だと示したあと、「だから緩めるべき」と直結せず、事実と価値判断を切り離して論考を立て直している。",
+    "improvement": "終盤の規範論へ入る前に、静粛を支持する競合理論や「公共空間の調整ルール」という別モデルを一度置くと、最終的な立場がさらに強くなる。",
+    "steal": "現在の常識 → 逆の過去 → 複数の転換点 → 理論化 → 現在の症状 → 事実と規範を分離して結論、という型。"
+  },
   "analysisMeta": {
     "method": "Eric Hayot, The Uneven U / Five Levels of Abstraction",
     "status": "paragraph-level reverse outline",
-    "note": "原文本文は表示・保存せず、各段落が論証上なにをしているかを要約・抽象化したReverse Outline。L1〜L5は段落の主要な抽象度を示す相対的な仮説。"
+    "note": "原文本文は表示・保存せず、各段落が論証上なにをしているかを抽象化したReverse Outline。"
   },
   "sections": [
     {
-      "id": "s00",
-      "index": "00",
-      "title": "導入 — マナー論争を歴史の問いへ変える",
-      "summary": "現在の映画館マナー論争を入口に、個人の振る舞いの問題から『静粛という規範はいつ成立したのか』という歴史的問いへスケールを上げる。",
+      "id": "s00", "index": "00", "title": "導入 — マナー論争を歴史の問いへ変える", "summary": "現在の映画館マナー論争を入口に、個人の振る舞いの問題から『静粛という規範はいつ成立したのか』という歴史的問いへスケールを上げる。",
       "paragraphs": [
         {"id":"p01","level":2,"role":"ENTRY","structuralSummary":"現在の映画館マナー論争を、読者がすぐ想像できる身近な問題として提示する。","reason":"具体的な現代の出来事・議論状況を入口にしているため。","confidence":"high"},
-        {"id":"p02","level":4,"role":"POSITION","structuralSummary":"単純な禁止・容認ではなく、他者への配慮と許容を併せ持つ立場を先に示す。","reason":"個別事例から一段上がり、この論考が採る判断枠組みを提示するため。","confidence":"medium"},
-        {"id":"p03","level":5,"role":"HORIZON","structuralSummary":"映画館を、他者との衝突と譲歩が不可避な公共的空間として捉える視座を置く。","reason":"映画館マナーを超えて公共空間一般へ広がる最上位の見取り図を提示するため。","confidence":"high"},
+        {"id":"p02","level":4,"role":"CLAIM","roleDetail":"POSITION","structuralSummary":"単純な禁止・容認ではなく、他者への配慮と許容を併せ持つ立場を先に示す。","reason":"個別事例から一段上がり、この論考が採る判断枠組みを提示するため。","confidence":"medium"},
+        {"id":"p03","level":5,"role":"CLAIM","roleDetail":"HORIZON","structuralSummary":"映画館を、他者との衝突と譲歩が不可避な公共的空間として捉える視座を置く。","reason":"映画館マナーを超えて公共空間一般へ広がる最上位の見取り図を提示するため。","confidence":"high"},
         {"id":"p04","level":4,"role":"QUESTION","structuralSummary":"現在当然視される静粛ルールを歴史化し、『昔からそうだったのか』という中心問いへ変換する。","reason":"論考全体を駆動する研究上の問い・部分命題を設定するため。","confidence":"high"}
       ]
     },
     {
-      "id": "s01",
-      "index": "01",
-      "title": "声のある映画館 — 『静かで当然』を崩す",
-      "summary": "現在と逆の過去を置き、静粛が映画館本来の性質ではないことを示したうえで、トーキー化と作品観の変化を最初の転換点として説明する。",
+      "id": "s01", "index": "01", "title": "声のある映画館 — 『静かで当然』を崩す", "summary": "現在と逆の過去を置き、静粛が映画館本来の性質ではないことを示したうえで、トーキー化と作品観の変化を最初の転換点として説明する。",
       "paragraphs": [
-        {"id":"p05","level":3,"role":"COUNTEREXAMPLE","structuralSummary":"初期映画館を、現在とは異なる『声のある上映空間』として提示し、現代の常識を相対化する。","reason":"複数の具体的史実をまとめ、現在との対照として機能させているため。","confidence":"high"},
-        {"id":"p06","level":2,"role":"HISTORICAL_DETAIL","structuralSummary":"弁士・生演奏・観客反応など、上映空間に複数の音源が共存していた具体像へ降りる。","reason":"個別の歴史的状況を説明する具体層だから。","confidence":"high"},
+        {"id":"p05","level":3,"role":"EVIDENCE","roleDetail":"COUNTEREXAMPLE","structuralSummary":"初期映画館を、現在とは異なる『声のある上映空間』として提示し、現代の常識を相対化する。","reason":"複数の具体的史実をまとめ、現在との対照として機能させているため。","confidence":"high"},
+        {"id":"p06","level":2,"role":"EVIDENCE","roleDetail":"HISTORICAL_DETAIL","structuralSummary":"弁士・生演奏・観客反応など、上映空間に複数の音源が共存していた具体像へ降りる。","reason":"個別の歴史的状況を説明する具体層だから。","confidence":"high"},
         {"id":"p07","level":3,"role":"INTERPRETATION","structuralSummary":"具体的な音の存在を、『静粛は映画館の原初的条件ではない』という解釈へまとめ直す。","reason":"史実をそのまま並べず、意味づけへ一段抽象化しているため。","confidence":"high"},
         {"id":"p08","level":4,"role":"TURN","structuralSummary":"映画が見世物から『作品』として受容される変化を、静粛化を説明する第一の転換点として導入する。","reason":"歴史的事実を因果説明の主要な枠組みへ引き上げているため。","confidence":"high"},
-        {"id":"p09","level":3,"role":"CAUSAL_BRIDGE","structuralSummary":"トーキー化によって作品内部の音が特権化され、観客の音が相対的に『外部のノイズ』へ変わる道筋を示す。","reason":"技術変化と規範変化の間をつなぐ中間的な説明だから。","confidence":"medium"},
-        {"id":"p10","level":4,"role":"SUBCLAIM","structuralSummary":"作品への集中を価値とする鑑賞様式が、静粛な観客を望ましいものにする条件を作ったとまとめる。","reason":"この節で積んだ史実を一つの部分命題へ統合しているため。","confidence":"high"}
+        {"id":"p09","level":3,"role":"BRIDGE","roleDetail":"CAUSAL_BRIDGE","structuralSummary":"トーキー化によって作品内部の音が特権化され、観客の音が相対的に『外部のノイズ』へ変わる道筋を示す。","reason":"技術変化と規範変化の間をつなぐ中間的な説明だから。","confidence":"medium"},
+        {"id":"p10","level":4,"role":"CLAIM","roleDetail":"SUBCLAIM","structuralSummary":"作品への集中を価値とする鑑賞様式が、静粛な観客を望ましいものにする条件を作ったとまとめる。","reason":"この節で積んだ史実を一つの部分命題へ統合しているため。","confidence":"high"}
       ]
     },
     {
-      "id": "s02",
-      "index": "02",
-      "title": "時間と身体の規律 — 観客自身が従う",
-      "summary": "『サイコ』の上映管理と定員入替制を通じて、静粛だけでなく観客の時間・身体まで組織される過程を示し、規律権力の概念へ接続する。",
+      "id": "s02", "index": "02", "title": "時間と身体の規律 — 観客自身が従う", "summary": "『サイコ』の上映管理と定員入替制を通じて、静粛だけでなく観客の時間・身体まで組織される過程を示し、規律権力の概念へ接続する。",
       "paragraphs": [
-        {"id":"p11","level":3,"role":"CASE","structuralSummary":"『サイコ』の途中入場禁止を、観客管理が映画体験そのものを作る具体例として導入する。","reason":"理論を支える象徴的なケースを提示する中間層だから。","confidence":"high"},
-        {"id":"p12","level":2,"role":"INSTITUTIONAL_DETAIL","structuralSummary":"上映時刻・入場・退場・入替を制御する興行制度の具体的な仕組みへ降りる。","reason":"観客の行動を実際に制約する制度の具体像を扱うため。","confidence":"high"},
+        {"id":"p11","level":3,"role":"EVIDENCE","roleDetail":"CASE","structuralSummary":"『サイコ』の途中入場禁止を、観客管理が映画体験そのものを作る具体例として導入する。","reason":"理論を支える象徴的なケースを提示する中間層だから。","confidence":"high"},
+        {"id":"p12","level":2,"role":"EVIDENCE","roleDetail":"INSTITUTIONAL_DETAIL","structuralSummary":"上映時刻・入場・退場・入替を制御する興行制度の具体的な仕組みへ降りる。","reason":"観客の行動を実際に制約する制度の具体像を扱うため。","confidence":"high"},
         {"id":"p13","level":4,"role":"INTERPRETATION","structuralSummary":"時間管理を単なる運営効率ではなく、より完全な鑑賞体験を作るための観客規律として読み替える。","reason":"制度の事実から、その制度が持つ意味へ抽象化しているため。","confidence":"high"},
-        {"id":"p14","level":5,"role":"THEORY","structuralSummary":"外から強制されるだけでなく、観客自身が望んで従う秩序として規律権力の理論へ接続する。","reason":"個別の映画館制度を越えた理論的説明へ上がるため。","confidence":"high"},
-        {"id":"p15","level":3,"role":"LOCALIZATION","structuralSummary":"日本の定員・入替制導入例へ戻り、理論を別の地域・制度史へ接続して検証する。","reason":"高い理論を再び歴史的事例へ下ろしているため。","confidence":"medium"},
+        {"id":"p14","level":5,"role":"CLAIM","roleDetail":"THEORY","structuralSummary":"外から強制されるだけでなく、観客自身が望んで従う秩序として規律権力の理論へ接続する。","reason":"個別の映画館制度を越えた理論的説明へ上がるため。","confidence":"high"},
+        {"id":"p15","level":3,"role":"EVIDENCE","roleDetail":"LOCALIZATION","structuralSummary":"日本の定員・入替制導入例へ戻り、理論を別の地域・制度史へ接続して検証する。","reason":"高い理論を再び歴史的事例へ下ろしているため。","confidence":"medium"},
         {"id":"p16","level":4,"role":"SYNTHESIS","structuralSummary":"当初は違和感のあった制度が反復によって標準化し、意識されない鑑賞習慣へ変わるとまとめる。","reason":"複数の事例を、規範の内面化という節の結論へ統合するため。","confidence":"high"}
       ]
     },
     {
-      "id": "s03",
-      "index": "03",
-      "title": "シネコン — 静粛を環境として完成させる",
-      "summary": "指定席・完全入替・高品質音響を備えたシネコンを、静かな鑑賞を標準環境として強化する第三の転換点として位置づけ、現在のマナー感覚へつなぐ。",
+      "id": "s03", "index": "03", "title": "シネコン — 静粛を環境として完成させる", "summary": "指定席・完全入替・高品質音響を備えたシネコンを、静かな鑑賞を標準環境として強化する第三の転換点として位置づけ、現在のマナー感覚へつなぐ。",
       "paragraphs": [
-        {"id":"p17","level":3,"role":"HISTORICAL_TURN","structuralSummary":"1990年代のシネコン普及を、静粛規範がさらに強まる次の歴史的局面として設定する。","reason":"新しい時代区分を導入し、次の因果説明へ橋をかけるため。","confidence":"high"},
-        {"id":"p18","level":2,"role":"INFRASTRUCTURE","structuralSummary":"指定席・完全入替・音響設備など、シネコンが提供する統制された鑑賞環境の具体要素を並べる。","reason":"制度・設備の具体的特徴へ降りているため。","confidence":"high"},
-        {"id":"p19","level":4,"role":"CAUSAL_CLAIM","structuralSummary":"ノイズの少ない高品質環境そのものが、他者の小さな音をより逸脱として知覚させる可能性を提示する。","reason":"設備の特徴を、静粛要求の強化という因果命題へ引き上げるため。","confidence":"medium"},
-        {"id":"p20","level":3,"role":"PRESENT_SYMPTOM","structuralSummary":"現在の『観客ガチャ』的な不満を、強い静粛規範が可視化された症状として読み取る。","reason":"現在の具体的言説を上位の規範構造の表れとして解釈するため。","confidence":"medium"},
-        {"id":"p21","level":4,"role":"COUNTERCASE","structuralSummary":"応援上映のような例外的形式を、通常上映の静粛規範がどれほど強いかを逆照射する装置として置く。","reason":"例外を使って通常状態の規範を説明する部分命題だから。","confidence":"high"},
+        {"id":"p17","level":3,"role":"TURN","roleDetail":"HISTORICAL_TURN","structuralSummary":"1990年代のシネコン普及を、静粛規範がさらに強まる次の歴史的局面として設定する。","reason":"新しい時代区分を導入し、次の因果説明へ橋をかけるため。","confidence":"high"},
+        {"id":"p18","level":2,"role":"EVIDENCE","roleDetail":"INFRASTRUCTURE","structuralSummary":"指定席・完全入替・音響設備など、シネコンが提供する統制された鑑賞環境の具体要素を並べる。","reason":"制度・設備の具体的特徴へ降りているため。","confidence":"high"},
+        {"id":"p19","level":4,"role":"CLAIM","roleDetail":"CAUSAL_CLAIM","structuralSummary":"ノイズの少ない高品質環境そのものが、他者の小さな音をより逸脱として知覚させる可能性を提示する。","reason":"設備の特徴を、静粛要求の強化という因果命題へ引き上げるため。","confidence":"medium"},
+        {"id":"p20","level":3,"role":"INTERPRETATION","roleDetail":"PRESENT_SYMPTOM","structuralSummary":"現在の『観客ガチャ』的な不満を、強い静粛規範が可視化された症状として読み取る。","reason":"現在の具体的言説を上位の規範構造の表れとして解釈するため。","confidence":"medium"},
+        {"id":"p21","level":4,"role":"EVIDENCE","roleDetail":"COUNTERCASE","structuralSummary":"応援上映のような例外的形式を、通常上映の静粛規範がどれほど強いかを逆照射する装置として置く。","reason":"例外を使って通常状態の規範を説明するため。","confidence":"high"},
         {"id":"p22","level":5,"role":"SYNTHESIS","structuralSummary":"技術・制度・観客欲望の相互強化によって、静粛が『自然な映画館』に見える段階まで到達したと総括する。","reason":"複数時代の変化を一つの広い歴史モデルへ統合するため。","confidence":"high"}
       ]
     },
     {
-      "id": "s04",
-      "index": "04",
-      "title": "規範へ戻る — 歴史と『どうすべきか』を分ける",
-      "summary": "歴史的に作られたという事実だけでは現在のマナーを否定できないと一度立ち止まり、そのうえで過度な純粋化より他者との共存を重視する立場へ戻る。",
+      "id": "s04", "index": "04", "title": "規範へ戻る — 歴史と『どうすべきか』を分ける", "summary": "歴史的に作られたという事実だけでは現在のマナーを否定できないと一度立ち止まり、そのうえで過度な純粋化より他者との共存を重視する立場へ戻る。",
       "paragraphs": [
-        {"id":"p23","level":4,"role":"RESET","structuralSummary":"歴史を示しただけでは、マナーを厳しくするか緩めるかという価値判断は自動的には決まらないと区切る。","reason":"記述的議論と規範的議論を切り分ける重要な論証上の操作だから。","confidence":"high"},
-        {"id":"p24","level":5,"role":"PRINCIPLE","structuralSummary":"『ルールだから正しい』ではなく、規範は理由を説明可能でなければならないという一般原則へ上がる。","reason":"映画館を越えて規則・規範一般へ適用される命題だから。","confidence":"high"},
+        {"id":"p23","level":4,"role":"TURN","roleDetail":"RESET","structuralSummary":"歴史を示しただけでは、マナーを厳しくするか緩めるかという価値判断は自動的には決まらないと区切る。","reason":"記述的議論と規範的議論を切り分ける重要な論証上の操作だから。","confidence":"high"},
+        {"id":"p24","level":5,"role":"CLAIM","roleDetail":"PRINCIPLE","structuralSummary":"『ルールだから正しい』ではなく、規範は理由を説明可能でなければならないという一般原則へ上がる。","reason":"映画館を越えて規則・規範一般へ適用される命題だから。","confidence":"high"},
         {"id":"p25","level":4,"role":"QUALIFICATION","structuralSummary":"歴史的可変性はルール廃止の根拠そのものではなく、異なる規範設計の可能性を開く材料だと限定する。","reason":"最上位命題を映画館マナーの議論へ適用可能な範囲に戻しているため。","confidence":"medium"},
-        {"id":"p26","level":5,"role":"ETHICAL_CLAIM","structuralSummary":"快適さを純化しすぎると、迷惑行為ではなく他者の存在そのものをノイズとして扱う危険があると問題を拡張する。","reason":"映画館を公共空間における他者共存の倫理へ拡張するため。","confidence":"medium"},
+        {"id":"p26","level":5,"role":"CLAIM","roleDetail":"ETHICAL_CLAIM","structuralSummary":"快適さを純化しすぎると、迷惑行為ではなく他者の存在そのものをノイズとして扱う危険があると問題を拡張する。","reason":"映画館を公共空間における他者共存の倫理へ拡張するため。","confidence":"medium"},
         {"id":"p27","level":4,"role":"RETURN","structuralSummary":"映画館を他者と同席する場所として再定義し、一定の衝突や不完全さを許容する立場へ戻る。","reason":"広い倫理的命題を最初の映画館マナー問題へ戻しているため。","confidence":"high"},
-        {"id":"p28","level":5,"role":"OPEN_END","structuralSummary":"静粛を守ること自体より、なぜその規範を求めるのかを各自が言語化する問いを残して閉じる。","reason":"個別の結論を越えて、読者が持ち帰る一般的な問いとして終えるため。","confidence":"high"}
+        {"id":"p28","level":5,"role":"CONCLUSION","roleDetail":"OPEN_END","structuralSummary":"静粛を守ること自体より、なぜその規範を求めるのかを各自が言語化する問いを残して閉じる。","reason":"個別の結論を越えて、読者が持ち帰る一般的な問いとして終えるため。","confidence":"high"}
       ]
     }
   ]
