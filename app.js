@@ -1,34 +1,173 @@
-const DATA_URL='./data/demo.json';
-const state={mode:'read',doc:null,selected:null,overrideStore:JSON.parse(localStorage.getItem('argument-altitude-overrides-v2')||'{}'),overrides:{}};
-const reader=document.querySelector('#reader'),inspector=document.querySelector('#inspector'),terrain=document.querySelector('#terrain'),mapView=document.querySelector('#mapView'),multiples=document.querySelector('#multiples'),tip=document.querySelector('#terrainTip');
-const ns='http://www.w3.org/2000/svg';
-const importBtn=document.querySelector('#importBtn'),exportBtn=document.querySelector('#exportBtn'),importFile=document.querySelector('#importFile');
+const DATA_URL = './data/demo.json';
+const state = { doc: null };
+
+const hero = document.querySelector('#hero');
+const sectionsRoot = document.querySelector('#sections');
+const levelGuide = document.querySelector('#levelGuide');
+const importBtn = document.querySelector('#importBtn');
+const exportBtn = document.querySelector('#exportBtn');
+const importFile = document.querySelector('#importFile');
+
+const LEVELS = [
+  { level: 1, name: 'GROUND', ja: '証拠・個別事実' },
+  { level: 2, name: 'SCENE', ja: '具体説明・背景' },
+  { level: 3, name: 'BRIDGE', ja: '解釈・橋渡し' },
+  { level: 4, name: 'CLAIM', ja: '部分主張・論点' },
+  { level: 5, name: 'HORIZON', ja: '理論・広い含意' }
+];
 
 init();
-async function init(){state.doc=await (await fetch(DATA_URL,{cache:'no-store'})).json();state.overrides=state.overrideStore[state.doc.id]||{};applyOverrides();render();bindGlobal();}
-function allSentences(){return state.doc.paragraphs.flatMap(p=>p.sentences.map(s=>({...s,paragraph:p})));}
-function sentenceById(id){for(const p of state.doc.paragraphs){const s=p.sentences.find(x=>x.id===id);if(s)return s;}return null;}
-function applyOverrides(){for(const p of state.doc.paragraphs)for(const s of p.sentences){const o=state.overrides[s.id];if(o?.level)s.level=o.level;}}
-function derivedReview(s,prev){const cues=[];if(s.confidence==='low')cues.push('LOW CONFIDENCE');if(prev&&Math.abs(s.level-prev.level)>=2)cues.push('ABSTRACTION LEAP');return cues;}
-function reviewItems(){const out=[];for(const p of state.doc.paragraphs){let prev=null;for(const s of p.sentences){const cues=derivedReview(s,prev);if(cues.length)out.push({s:{...s,paragraph:p},cues});prev=s;}}return out;}
-function render(){document.body.className=`${state.mode}-mode`;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===state.mode));mapView.hidden=state.mode!=='map';renderTerrain();renderReader();renderMap();renderReviewCount();if(state.selected)renderInspector(state.selected);}
-function renderReader(){const d=state.doc;reader.innerHTML=`<header class="doc-head"><p class="eyebrow">GOLD DATASET · SEED</p><h1>${esc(d.title)}</h1><div class="meta"><a href="${d.source.url}" target="_blank" rel="noreferrer">原文 ↗</a><span>${esc(d.source.publisher)}</span><span>${d.paragraphs.length} paragraphs</span><span>${allSentences().length} sentences</span></div><p class="method-note">L1〜L5は「正解」ではなく、証拠からの距離についての編集可能な仮説。公開デモは参照元記事の導入テーマをもとに再構成したサンプルで、原文全文は保存していません。</p></header>`+d.paragraphs.map((p,i)=>paragraphHTML(p,i)).join('');reader.querySelectorAll('.sentence').forEach(el=>{el.addEventListener('mouseenter',()=>highlight(el.dataset.sid));el.addEventListener('mouseleave',()=>highlight(null));el.addEventListener('click',()=>select(el.dataset.sid));});reader.querySelectorAll('.mini-wave').forEach(svg=>bindWave(svg));}
-function paragraphHTML(p,i){let prev=null;const body=p.sentences.map(s=>{const cues=derivedReview(s,prev);prev=s;return `<span class="sentence ${state.selected===s.id?'selected':''}" data-sid="${s.id}" data-review="${cues.length>0}"><span class="level-badge">${s.level}</span>${esc(s.text)}</span>`}).join('');return `<section class="paragraph" id="${p.id}"><aside class="para-side"><div><div class="para-id">${p.id.toUpperCase()}</div><div class="para-pattern">${esc(patternFor(p.sentences))}</div></div>${waveSVG(p.sentences,'mini-wave',p.id)}</aside><div><p class="para-label">${esc(p.label)}</p>${p.synthetic?'<span class="synthetic-note">校正用の自作サンプル</span>':''}<p class="prose">${body}</p></div></section>`;}
-function renderTerrain(){const arr=allSentences();terrain.innerHTML='';const W=1000,H=96,pad=8;const x=i=>pad+(W-pad*2)*(arr.length===1?.5:i/(arr.length-1));const y=l=>pad+(5-l)*(H-pad*2)/4;for(let l=1;l<=5;l++){const line=svg('line',{x1:0,y1:y(l),x2:W,y2:y(l),stroke:'#dedad0','stroke-width':1});terrain.append(line)}for(let i=1;i<arr.length;i++){if(arr[i].paragraph.id!==arr[i-1].paragraph.id)terrain.append(svg('line',{x1:x(i)-((x(i)-x(i-1))/2),y1:0,x2:x(i)-((x(i)-x(i-1))/2),y2:H,stroke:'#c5c0b4','stroke-dasharray':'3 4'}))}const pts=arr.map((s,i)=>`${x(i)},${y(s.level)}`).join(' ');terrain.append(svg('polyline',{points:pts,fill:'none',stroke:'#1c1d19','stroke-width':2.2,'vector-effect':'non-scaling-stroke'}));arr.forEach((s,i)=>{const c=svg('circle',{cx:x(i),cy:y(s.level),r:state.selected===s.id?6:4,fill:s.confidence==='low'?'#f6f3ec':'#9c2f2a',stroke:'#9c2f2a','stroke-width':2,'data-sid':s.id,tabindex:0});c.addEventListener('mouseenter',e=>showTip(e,s));c.addEventListener('mouseleave',hideTip);c.addEventListener('click',()=>{select(s.id);document.querySelector(`[data-sid="${s.id}"]`)?.scrollIntoView({block:'center',behavior:'smooth'})});terrain.append(c)});}
-function waveSVG(sentences,cls,pid){const W=160,H=72,pad=7;const x=i=>pad+(W-pad*2)*(sentences.length===1?.5:i/(sentences.length-1));const y=l=>pad+(5-l)*(H-pad*2)/4;const pts=sentences.map((s,i)=>`${x(i)},${y(s.level)}`).join(' ');return `<svg class="${cls}" data-pid="${pid}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="${sentences.map(s=>s.level).join('→')}"><polyline points="${pts}" fill="none" stroke="#262722" stroke-width="2" vector-effect="non-scaling-stroke"/>${sentences.map((s,i)=>`<circle cx="${x(i)}" cy="${y(s.level)}" r="4" fill="#9c2f2a" data-sid="${s.id}"/>`).join('')}</svg>`}
-function bindWave(root){root.querySelectorAll('circle').forEach(c=>{c.addEventListener('mouseenter',()=>highlight(c.dataset.sid));c.addEventListener('mouseleave',()=>highlight(null));c.addEventListener('click',e=>{e.stopPropagation();select(c.dataset.sid);document.querySelector(`.sentence[data-sid="${c.dataset.sid}"]`)?.scrollIntoView({block:'center',behavior:'smooth'})})});root.addEventListener('click',()=>document.querySelector(`#${root.dataset.pid}`)?.scrollIntoView({block:'center',behavior:'smooth'}));}
-function renderMap(){multiples.innerHTML=state.doc.paragraphs.map(p=>`<div class="multiple" data-pid="${p.id}"><div><strong>${p.id.toUpperCase()}</strong><div class="para-pattern">${esc(patternFor(p.sentences))}</div></div>${waveSVG(p.sentences,'map-wave',p.id)}<div class="sequence">${p.sentences.map(s=>s.level).join(' → ')}</div></div>`).join('');multiples.querySelectorAll('.multiple').forEach(el=>el.addEventListener('click',()=>{state.mode='levels';render();setTimeout(()=>document.querySelector(`#${el.dataset.pid}`)?.scrollIntoView({block:'center'}),0)}));}
-function select(id){state.selected=id;renderInspector(id);document.querySelectorAll('.sentence').forEach(e=>e.classList.toggle('selected',e.dataset.sid===id));renderTerrain();if(innerWidth<900)inspector.classList.add('open');}
-function renderInspector(id){const s=allSentences().find(x=>x.id===id);if(!s)return;const para=s.paragraph,idx=para.sentences.findIndex(x=>x.id===id),prev=para.sentences[idx-1],next=para.sentences[idx+1];const cues=derivedReview(s,prev);inspector.innerHTML=`<p class="eyebrow">SENTENCE INSPECTOR</p><h2>L${s.level} · ${esc(s.function)}</h2><p class="inspector-sentence">${esc(s.text)}</p><dl class="kv"><dt>Movement</dt><dd>${esc(s.movement)}</dd><dt>Confidence</dt><dd>${esc(s.confidence.toUpperCase())}</dd><dt>Previous</dt><dd>${prev?'L'+prev.level:'—'}</dd><dt>Next</dt><dd>${next?'L'+next.level:'—'}</dd><dt>Review</dt><dd>${cues.length?esc(cues.join(' / ')):'—'}</dd><dt>Source</dt><dd>${esc(s.provenance)}</dd></dl><div class="level-picker" aria-label="Levelを変更">${[1,2,3,4,5].map(n=>`<button class="level-choice ${s.level===n?'active':''}" data-level="${n}">L${n}</button>`).join('')}</div><p class="reason">${esc(s.reason)}</p>`;inspector.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>setLevel(id,+b.dataset.level)));}
-function setLevel(id,level){const s=sentenceById(id);if(!s)return;s.level=level;state.overrides[id]={level};state.overrideStore[state.doc.id]=state.overrides;localStorage.setItem('argument-altitude-overrides-v2',JSON.stringify(state.overrideStore));render();select(id);}
-function patternFor(sentences){const levels=sentences.map(s=>s.level);if(levels.length<2)return 'SINGLE';const deltas=levels.slice(1).map((v,i)=>v-levels[i]);if(deltas.every(d=>d===0))return 'FLAT';if(deltas.every(d=>d>=0)&&deltas.some(d=>d>0))return 'ASCENDING';if(deltas.every(d=>d<=0)&&deltas.some(d=>d<0))return 'DESCENDING';const min=Math.min(...levels),minIndex=levels.indexOf(min);const before=levels.slice(0,minIndex+1),after=levels.slice(minIndex);const desc=before.every((v,i)=>i===0||v<=before[i-1]);const asc=after.every((v,i)=>i===0||v>=after[i-1]);if(minIndex>0&&minIndex<levels.length-1&&desc&&asc)return 'UNEVEN U';return 'ZIGZAG';}
-function renderReviewCount(){document.querySelector('#reviewCount').textContent=reviewItems().length;}
-function bindGlobal(){importBtn.addEventListener('click',()=>importFile.click());importFile.addEventListener('change',importAnalysis);exportBtn.addEventListener('click',exportAnalysis);document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;render();window.scrollTo({top:0})}));document.querySelector('#reviewBtn').addEventListener('click',openReview);document.querySelectorAll('[data-review-close]').forEach(e=>e.addEventListener('click',closeReview));document.addEventListener('keydown',e=>{if(e.key==='Escape'){inspector.classList.remove('open');closeReview()}if(state.selected&&/^[1-5]$/.test(e.key)&&!e.metaKey&&!e.ctrlKey)setLevel(state.selected,+e.key)});}
-async function importAnalysis(){const file=importFile.files?.[0];if(!file)return;try{const data=JSON.parse(await file.text());validateDoc(data);state.doc=data;state.selected=null;state.overrides=state.overrideStore[data.id]||{};applyOverrides();render();window.scrollTo({top:0,behavior:'smooth'});}catch(error){alert(`Importできません: ${error.message}`);}finally{importFile.value='';}}
-function exportAnalysis(){const blob=new Blob([JSON.stringify(state.doc,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${state.doc.id||'argument-altitude'}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),0);}
-function validateDoc(data){if(!data||!Array.isArray(data.paragraphs))throw new Error('paragraphs がありません');const ids=new Set();for(const p of data.paragraphs){if(!Array.isArray(p.sentences))throw new Error(`${p.id||'paragraph'} の sentences が不正です`);for(const s of p.sentences){if(!s.id||ids.has(s.id))throw new Error('Sentence ID が欠落または重複しています');ids.add(s.id);if(!Number.isInteger(s.level)||s.level<1||s.level>5)throw new Error(`${s.id} の level は1〜5で指定してください`);}}}
-function openReview(){const items=reviewItems();document.querySelector('#reviewBody').innerHTML=items.length?items.map(({s,cues})=>`<div class="review-item" data-review-sid="${s.id}"><span class="review-tag">${esc(cues.join(' · '))}</span><p>${esc(s.text)}</p><small>L${s.level} · ${esc(s.confidence)}</small></div>`).join(''):'<p>いまの判定では読み直し候補はありません。</p>';document.querySelectorAll('[data-review-sid]').forEach(el=>el.addEventListener('click',()=>{closeReview();state.mode='levels';render();select(el.dataset.reviewSid);setTimeout(()=>document.querySelector(`[data-sid="${el.dataset.reviewSid}"]`)?.scrollIntoView({block:'center'}),0)}));document.querySelector('#reviewSheet').setAttribute('aria-hidden','false');}
-function closeReview(){document.querySelector('#reviewSheet').setAttribute('aria-hidden','true');}
-function highlight(id){document.querySelectorAll('[data-sid]').forEach(e=>{if(e.tagName==='circle')e.setAttribute('opacity',!id||e.dataset.sid===id?'1':'.28');else if(e.classList.contains('sentence'))e.style.background=id&&e.dataset.sid===id?'#fff4cf':''})}
-function showTip(e,s){tip.hidden=false;tip.textContent=`${s.id} · L${s.level} · ${s.function}\n${s.text.slice(0,52)}${s.text.length>52?'…':''}`;tip.style.left=`${Math.min(innerWidth-320,e.clientX+12)}px`;tip.style.top=`${e.clientY+12}px`;highlight(s.id)}function hideTip(){tip.hidden=true;highlight(null)}
-function svg(name,attrs){const el=document.createElementNS(ns,name);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));return el}function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+async function init() {
+  try {
+    const response = await fetch(DATA_URL, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+    const data = await response.json();
+    validateDoc(data);
+    state.doc = data;
+    render();
+    bind();
+  } catch (error) {
+    hero.innerHTML = `<div class="error-state"><strong>データを読み込めませんでした。</strong><span>${esc(error.message)}</span></div>`;
+  }
+}
+
+function bind() {
+  importBtn.addEventListener('click', () => importFile.click());
+  importFile.addEventListener('change', importAnalysis);
+  exportBtn.addEventListener('click', exportAnalysis);
+}
+
+function render() {
+  renderHero();
+  renderGuide();
+  renderSections();
+}
+
+function renderHero() {
+  const d = state.doc;
+  const paragraphCount = d.sections.reduce((sum, section) => sum + section.paragraphs.length, 0);
+  hero.innerHTML = `
+    <header class="doc-head">
+      <p class="eyebrow">PARAGRAPH REVERSE OUTLINE</p>
+      <h1>${esc(d.title)}</h1>
+      ${d.subtitle ? `<p class="subtitle">${esc(d.subtitle)}</p>` : ''}
+      <div class="meta">
+        <a href="${attr(d.source.url)}" target="_blank" rel="noreferrer">原文 ↗</a>
+        <span>${esc(d.source.publisher || '')}</span>
+        <span>${d.sections.length} sections</span>
+        <span>${paragraphCount} paragraph units</span>
+      </div>
+      <p class="thesis">${esc(d.thesis || '')}</p>
+      <p class="method-note">原文本文は表示しません。各段落を「そこで何が書かれているか」ではなく、<strong>その段落が論証の中で何をしているか</strong>へ抽象化しています。L1ほど具体、L5ほど抽象です。</p>
+    </header>`;
+}
+
+function renderGuide() {
+  levelGuide.innerHTML = `
+    <div class="guide-copy"><span>具体</span><span>抽象</span></div>
+    <div class="guide-levels">
+      ${LEVELS.map(item => `<div class="guide-level"><strong>L${item.level}</strong><span>${esc(item.ja)}</span></div>`).join('')}
+    </div>`;
+}
+
+function renderSections() {
+  sectionsRoot.innerHTML = state.doc.sections.map(renderSection).join('');
+}
+
+function renderSection(section) {
+  let previousLevel = null;
+  const sequence = section.paragraphs.map(p => `L${p.level}`).join(' → ');
+  const paragraphs = section.paragraphs.map(paragraph => {
+    const movement = movementLabel(previousLevel, paragraph.level);
+    previousLevel = paragraph.level;
+    return renderParagraph(paragraph, movement);
+  }).join('');
+
+  return `
+    <section class="section-block" id="${attr(section.id)}">
+      <header class="section-head">
+        <div class="section-index">SECTION ${esc(section.index)}</div>
+        <h2>${esc(section.title)}</h2>
+        <p>${esc(section.summary)}</p>
+        <div class="section-sequence" aria-label="段落ごとの抽象度推移">${esc(sequence)}</div>
+      </header>
+      <div class="paragraph-list">${paragraphs}</div>
+    </section>`;
+}
+
+function renderParagraph(paragraph, movement) {
+  return `
+    <details class="paragraph-item level-${paragraph.level}" style="--level:${paragraph.level}">
+      <summary>
+        <div class="paragraph-meta">
+          <span class="paragraph-id">${esc(paragraph.id.toUpperCase())}</span>
+          <span class="level-chip">L${paragraph.level}</span>
+          <span class="role">${esc(paragraph.role)}</span>
+        </div>
+        <p class="structural-summary">${esc(paragraph.structuralSummary)}</p>
+        <span class="movement ${movement.className}">${esc(movement.label)}</span>
+        <span class="expand-hint" aria-hidden="true">＋</span>
+      </summary>
+      <div class="paragraph-detail">
+        <div><span>WHY L${paragraph.level}</span><p>${esc(paragraph.reason)}</p></div>
+        <div><span>CONFIDENCE</span><p>${esc((paragraph.confidence || '—').toUpperCase())}</p></div>
+      </div>
+    </details>`;
+}
+
+function movementLabel(previous, current) {
+  if (previous == null) return { label: 'START', className: 'hold' };
+  const delta = current - previous;
+  if (delta > 0) return { label: `↑ ABSTRACT +${delta}`, className: 'up' };
+  if (delta < 0) return { label: `↓ CONCRETE ${delta}`, className: 'down' };
+  return { label: '→ HOLD', className: 'hold' };
+}
+
+async function importAnalysis() {
+  const file = importFile.files?.[0];
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    validateDoc(data);
+    state.doc = data;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (error) {
+    alert(`Importできません: ${error.message}`);
+  } finally {
+    importFile.value = '';
+  }
+}
+
+function exportAnalysis() {
+  const blob = new Blob([JSON.stringify(state.doc, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${state.doc.id || 'argument-altitude-outline'}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+function validateDoc(data) {
+  if (!data || !Array.isArray(data.sections)) throw new Error('sections がありません');
+  for (const section of data.sections) {
+    if (!Array.isArray(section.paragraphs)) throw new Error(`${section.id || 'section'} の paragraphs が不正です`);
+    for (const paragraph of section.paragraphs) {
+      if (!paragraph.id) throw new Error('paragraph id がありません');
+      if (!Number.isInteger(paragraph.level) || paragraph.level < 1 || paragraph.level > 5) {
+        throw new Error(`${paragraph.id} の level は1〜5で指定してください`);
+      }
+      if (!paragraph.structuralSummary) throw new Error(`${paragraph.id} の structuralSummary がありません`);
+    }
+  }
+}
+
+function esc(value = '') {
+  return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+}
+
+function attr(value = '') {
+  return esc(value);
+}
