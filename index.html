@@ -8,23 +8,26 @@
 <title>Argument Altitude — Analysis Library</title>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./styles.css">
-<link rel="stylesheet" href="./enhancements.css">
 </head>
 <body>
 <a class="skip" href="#outline">コンテンツへ</a>
 <header class="topbar">
   <a class="brand" href="#/">Argument Altitude</a>
-  <div class="header-actions">
-    <button id="importBtn" class="tool-btn" type="button">IMPORT</button>
-    <button id="exportBtn" class="tool-btn" type="button">EXPORT</button>
-    <input id="importFile" type="file" accept="application/json,.json" hidden>
-  </div>
+  <details class="tools-menu">
+    <summary aria-label="ツールメニュー">•••</summary>
+    <div class="tools-popover">
+      <button id="importBtn" class="tool-btn" type="button">Import JSON</button>
+      <button id="exportBtn" class="tool-btn" type="button">Export JSON</button>
+      <input id="importFile" type="file" accept="application/json,.json" hidden>
+    </div>
+  </details>
 </header>
 <main class="page" id="outline">
   <section id="hero"></section>
-  <section id="evaluation" class="evaluation" aria-label="文章の骨格評価"></section>
-  <section id="levelGuide" class="level-guide" aria-label="L5からL1の抽象度"></section>
+  <section id="structureMap" class="structure-map" aria-label="文章全体の構造"></section>
+  <section id="structureSummary" class="structure-summary"></section>
   <div id="sections"></div>
+  <section id="evaluation" class="evaluation" aria-label="文章の詳細な骨格評価"></section>
 </main>
 <script type="module" src="./app.js"></script>
 </body>
