@@ -1,21 +1,60 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "articles": [
+    {
+      "id": "attention-economy-one-minute-190-years",
+      "slug": "attention-economy-one-minute-190-years",
+      "dataPath": "./data/articles/attention-economy-one-minute-190-years.json",
+      "title": "1億人から「1分」ずつ集めると190年になる――アテンションエコノミーを本気で数えてみた",
+      "subtitle": "無料サービスの代金は、本当に0円なのか",
+      "source": {"url": "https://silovar-uk.github.io/myessays/#/essay/attention-economy-one-minute-190-years?lang=ja", "publisher": "MyEssays"},
+      "analyzedAt": "2026-09-13",
+      "sectionCount": 10,
+      "paragraphCount": 35,
+      "structuralSignature": "小さな思考実験 → 概念の起源 → 分かりやすい通説 → 一次情報による訂正 → 反証でコスト概念を修正 → 規模の模型化 → 反対側の効用を回収 → 実用的な判断基準 → 冒頭の問いへ戻る",
+      "structuralNote": "調査のたびに自分の説明を壊し、より地味だが正確なモデルへ更新していく自己訂正型。",
+      "tags": ["注意", "デジタル", "広告", "調査型エッセイ"]
+    },
+    {
+      "id": "outcome-before-task-issue-setting",
+      "slug": "outcome-before-task-issue-setting",
+      "dataPath": "./data/articles/outcome-before-task-issue-setting.json",
+      "title": "「片づけをする」は、目標ではなかった――達成すべき状態を先に決める",
+      "subtitle": "目標・イシュー・タスクを分けると、仕事の輪郭が変わる",
+      "source": {"url": "https://silovar-uk.github.io/myessays/#/essay/outcome-before-task-issue-setting?lang=ja", "publisher": "MyEssays"},
+      "analyzedAt": "2026-09-13",
+      "sectionCount": 9,
+      "paragraphCount": 32,
+      "structuralSignature": "身近な失敗 → 初期仮説 → 研究による支持 → 反証で条件を追加 → 概念を三分割 → 同じ例で再構成 → 複数の実務例へ展開 → 四行テンプレへ圧縮 → 問題設定の原理へ一般化 → 冒頭の失敗へ戻る",
+      "structuralNote": "反証で主張を条件付きにした後、概念分解と再適用を通して、そのまま使える仕事の型へ変える。",
+      "tags": ["仕事", "問題設定", "目標", "実務"]
+    },
+    {
+      "id": "duck-hunt-choose-your-game",
+      "slug": "duck-hunt-choose-your-game",
+      "dataPath": "./data/articles/duck-hunt-choose-your-game.json",
+      "title": "自分は、どういうゲームをしたいのか――ダックハントでカンと一緒に動く",
+      "subtitle": "技を当てる前に、盤面と読み合いそのものを自分の得意な形へ変える",
+      "source": {"url": "https://silovar-uk.github.io/myessays/#/essay/duck-hunt-choose-your-game?lang=ja", "publisher": "MyEssays"},
+      "analyzedAt": "2026-09-13",
+      "sectionCount": 10,
+      "paragraphCount": 35,
+      "structuralSignature": "奇妙な使用感 → 道具の再定義 → 操作上の誤解を訂正 → 本体と道具を一体化 → 外部理論で読み合いを抽象化 → ランダムとの違いを限定 → 「何を当てるか」から「どんなゲームを作るか」へ上位化 → 振り返り指標へ落とす → 一つの練習ルールで閉じる",
+      "structuralNote": "具体的な操作感から理論へ段階的に上がり、最後は明日の一行ルールまで具体へ戻る上昇・回帰型。",
+      "tags": ["ゲーム", "戦略", "意思決定", "実践"]
+    },
     {
       "id": "cinema-manners-outline",
       "slug": "cinema-manners-outline",
       "dataPath": "./data/demo.json",
       "title": "声はどのように映画館から駆逐されたか",
       "subtitle": "映画館マナーの歴史に向けて",
-      "source": {
-        "url": "https://myym34443.hatenadiary.jp/entry/2026/09/10/225753",
-        "publisher": "勘違い"
-      },
+      "source": {"url": "https://myym34443.hatenadiary.jp/entry/2026/09/10/225753", "publisher": "勘違い"},
       "analyzedAt": "2026-09-13",
       "sectionCount": 5,
       "paragraphCount": 28,
       "structuralSignature": "現在の常識 → 逆の過去 → 技術・制度・環境による複線的因果 → 理論化 → 現在の症状 → 規範判断へ戻る",
-      "structuralNote": "現在の違和感を入口にしてから歴史へ後退するため、読者の問題意識を保ったまま長い因果説明へ移れる骨格。",
+      "structuralNote": "現在の違和感を入口にしてから歴史へ後退するため、読者の問題意識を保ったまま長い因果説明へ移れる。",
       "tags": ["映画", "公共空間", "規範", "系譜学"]
     }
   ]
