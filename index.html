@@ -16,7 +16,12 @@
     <button data-mode="levels">LEVELS</button>
     <button data-mode="map">MAP</button>
   </nav>
-  <button id="reviewBtn" class="review-btn">REVIEW <span id="reviewCount">0</span></button>
+  <div class="header-actions">
+    <button id="importBtn" class="tool-btn">IMPORT</button>
+    <button id="exportBtn" class="tool-btn">EXPORT</button>
+    <button id="reviewBtn" class="review-btn">REVIEW <span id="reviewCount">0</span></button>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+  </div>
 </header>
 <section class="terrain-shell" aria-label="論証地形">
   <div class="terrain-labels"><span>L5 抽象</span><span>L1 具体</span></div>
