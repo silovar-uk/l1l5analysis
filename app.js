@@ -1,96 +1,30 @@
-import { renderLibraryPage, renderDetailPage } from './lib/render.js';
-import { createDrawers } from './lib/drawers.js';
-
-const DATA_URLS = ["./data/cinema-manners.json"];
-const main = document.querySelector("#main");
-const xrayToggle = document.querySelector("#xray-toggle");
-let analyses = [];
-let currentAnalysis = null;
-let xrayEnabled = false;
-let observer = null;
-
-const drawers = createDrawers({
-  sourceDrawer: document.querySelector("#source-drawer"),
-  sourceBody: document.querySelector("#source-drawer-body"),
-  mriDrawer: document.querySelector("#mri-drawer"),
-  mriBody: document.querySelector("#mri-drawer-body"),
-  getAnalysis: () => currentAnalysis
-});
-
-async function init() {
-  analyses = (await Promise.all(DATA_URLS.map(loadJson))).filter(Boolean);
-  window.addEventListener("hashchange", route);
-  xrayToggle.addEventListener("click", toggleXray);
-  document.addEventListener("click", handleClick);
-  document.addEventListener("keydown", event => { if (event.key === "Escape") drawers.closeAll(); });
-  route();
-}
-
-async function loadJson(url) {
-  try {
-    const response = await fetch(url, { cache: "no-store" });
-    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-    return await response.json();
-  } catch (error) {
-    console.error(`Failed to load ${url}`, error);
-    return null;
-  }
-}
-
-function route() {
-  drawers.closeAll();
-  const match = (location.hash || "#/").match(/^#\/analysis\/([^/?#]+)/);
-  const analysis = match ? analyses.find(item => item.slug === match[1]) : null;
-  analysis ? showDetail(analysis) : showLibrary();
-}
-
-function showLibrary() {
-  currentAnalysis = null;
-  xrayEnabled = false;
-  xrayToggle.hidden = true;
-  document.body.classList.remove("xray");
-  document.title = "L1–L5 Analysis Archive";
-  main.innerHTML = renderLibraryPage(analyses);
-  window.scrollTo(0, 0);
-}
-
-function showDetail(item) {
-  currentAnalysis = item;
-  xrayToggle.hidden = false;
-  xrayToggle.setAttribute("aria-pressed", String(xrayEnabled));
-  document.body.classList.toggle("xray", xrayEnabled);
-  document.title = `${item.title} | L1–L5 Analysis Archive`;
-  main.innerHTML = renderDetailPage(item);
-  setupObserver();
-  window.scrollTo(0, 0);
-}
-
-function toggleXray() {
-  xrayEnabled = !xrayEnabled;
-  document.body.classList.toggle("xray", xrayEnabled);
-  xrayToggle.setAttribute("aria-pressed", String(xrayEnabled));
-}
-
-function handleClick(event) {
-  const source = event.target.closest("[data-source-id]");
-  if (source) return drawers.openSource(source.dataset.sourceId);
-  const trace = event.target.closest("[data-trace-id]");
-  if (trace) return drawers.openMri(trace.dataset.traceId);
-  if (event.target.closest("[data-close-drawer]")) drawers.closeSource();
-  if (event.target.closest("[data-close-mri]")) drawers.closeMri();
-}
-
-function setupObserver() {
-  if (observer) observer.disconnect();
-  const sections = document.querySelectorAll("[data-layer-section]");
-  const links = document.querySelectorAll("[data-layer-link]");
-  observer = new IntersectionObserver(entries => {
-    const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!visible) return;
-    const id = visible.target.dataset.layerSection;
-    links.forEach(link => link.classList.toggle("active", link.dataset.layerLink === id));
-  }, { rootMargin: "-20% 0px -68% 0px", threshold: [0, .2, .5, .8] });
-  sections.forEach(section => observer.observe(section));
-}
+const DATA_URL='./data/demo.json';
+const state={mode:'read',doc:null,selected:null,overrides:JSON.parse(localStorage.getItem('argument-altitude-overrides')||'{}')};
+const reader=document.querySelector('#reader'),inspector=document.querySelector('#inspector'),terrain=document.querySelector('#terrain'),multiples=document.querySelector('#multiples'),tip=document.querySelector('#terrainTip');
+const ns='http://www.w3.org/2000/svg';
 
 init();
+async function init(){state.doc=await (await fetch(DATA_URL,{cache:'no-store'})).json();applyOverrides();render();bindGlobal();}
+function allSentences(){return state.doc.paragraphs.flatMap(p=>p.sentences.map(s=>({...s,paragraph:p})));}
+function applyOverrides(){for(const p of state.doc.paragraphs)for(const s of p.sentences){const o=state.overrides[s.id];if(o?.level)s.level=o.level;}}
+function derivedReview(s,prev){const cues=[];if(s.confidence==='low')cues.push('LOW CONFIDENCE');if(prev&&Math.abs(s.level-prev.level)>=2)cues.push('ABSTRACTION LEAP');return cues;}
+function reviewItems(){const out=[];let prev=null;for(const s of allSentences()){const cues=derivedReview(s,prev);if(cues.length)out.push({s,cues});prev=s;}return out;}
+function render(){document.body.className=`${state.mode}-mode`;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===state.mode));renderTerrain();renderReader();renderMap();renderReviewCount();if(state.selected)renderInspector(state.selected);}
+function renderReader(){const d=state.doc;reader.innerHTML=`<header class="doc-head"><p class="eyebrow">GOLD DATASET · SEED</p><h1>${esc(d.title)}</h1><div class="meta"><a href="${d.source.url}" target="_blank" rel="noreferrer">原文 ↗</a><span>${esc(d.source.publisher)}</span><span>${d.paragraphs.length} paragraphs</span><span>${allSentences().length} sentences</span></div><p class="method-note">L1〜L5は「正解」ではなく、証拠からの距離についての編集可能な仮説。公開デモでは外部記事の導入部のみを短く収録し、校正用の自作段落を1つ併置しています。</p></header>`+d.paragraphs.map(paragraphHTML).join('');reader.querySelectorAll('.sentence').forEach(el=>{el.addEventListener('mouseenter',()=>highlight(el.dataset.sid));el.addEventListener('mouseleave',()=>highlight(null));el.addEventListener('click',()=>select(el.dataset.sid));});reader.querySelectorAll('.mini-wave').forEach(wave=>bindWave(wave));}
+function paragraphHTML(p){let prev=null;const body=p.sentences.map(s=>{const cues=derivedReview(s,prev);prev=s;return `<span class="sentence ${state.selected===s.id?'selected':''}" data-sid="${s.id}" data-review="${cues.length>0}"><span class="level-badge">${s.level}</span>${esc(s.text)}</span>`}).join('');return `<section class="paragraph" id="${p.id}"><aside class="para-side"><div><div class="para-id">${p.id.toUpperCase()}</div><div class="para-pattern">${esc(p.pattern)}</div></div>${waveSVG(p.sentences,'mini-wave',p.id)}</aside><div><p class="para-label">${esc(p.label)}</p>${p.synthetic?'<span class="synthetic-note">校正用の自作サンプル</span>':''}<p class="prose">${body}</p></div></section>`;}
+function renderTerrain(){const arr=allSentences();terrain.innerHTML='';const W=1000,H=96,pad=8;const x=i=>pad+(W-pad*2)*(arr.length===1?.5:i/(arr.length-1));const y=l=>pad+(5-l)*(H-pad*2)/4;for(let l=1;l<=5;l++)terrain.append(svg('line',{x1:0,y1:y(l),x2:W,y2:y(l),stroke:'#dedad0','stroke-width':1}));for(let i=1;i<arr.length;i++){if(arr[i].paragraph.id!==arr[i-1].paragraph.id)terrain.append(svg('line',{x1:x(i)-((x(i)-x(i-1))/2),y1:0,x2:x(i)-((x(i)-x(i-1))/2),y2:H,stroke:'#c5c0b4','stroke-dasharray':'3 4'}));}terrain.append(svg('polyline',{points:arr.map((s,i)=>`${x(i)},${y(s.level)}`).join(' '),fill:'none',stroke:'#1c1d19','stroke-width':2.2,'vector-effect':'non-scaling-stroke'}));arr.forEach((s,i)=>{const c=svg('circle',{cx:x(i),cy:y(s.level),r:state.selected===s.id?6:4,fill:s.confidence==='low'?'#f6f3ec':'#9c2f2a',stroke:'#9c2f2a','stroke-width':2,'data-sid':s.id,tabindex:0});c.addEventListener('mouseenter',e=>showTip(e,s));c.addEventListener('mouseleave',hideTip);c.addEventListener('click',()=>{select(s.id);document.querySelector(`.sentence[data-sid="${s.id}"]`)?.scrollIntoView({block:'center',behavior:'smooth'});});terrain.append(c);});}
+function waveSVG(sentences,cls,pid){const W=160,H=72,pad=7;const x=i=>pad+(W-pad*2)*(sentences.length===1?.5:i/(sentences.length-1));const y=l=>pad+(5-l)*(H-pad*2)/4;return `<svg class="${cls}" data-pid="${pid}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="${sentences.map(s=>s.level).join('→')}"><polyline points="${sentences.map((s,i)=>`${x(i)},${y(s.level)}`).join(' ')}" fill="none" stroke="#262722" stroke-width="2" vector-effect="non-scaling-stroke"/>${sentences.map((s,i)=>`<circle cx="${x(i)}" cy="${y(s.level)}" r="4" fill="#9c2f2a" data-sid="${s.id}"/>`).join('')}</svg>`;}
+function bindWave(root){root.querySelectorAll('circle').forEach(c=>{c.addEventListener('mouseenter',()=>highlight(c.dataset.sid));c.addEventListener('mouseleave',()=>highlight(null));c.addEventListener('click',e=>{e.stopPropagation();select(c.dataset.sid);document.querySelector(`.sentence[data-sid="${c.dataset.sid}"]`)?.scrollIntoView({block:'center',behavior:'smooth'});});});root.addEventListener('click',()=>document.querySelector(`#${root.dataset.pid}`)?.scrollIntoView({block:'center',behavior:'smooth'}));}
+function renderMap(){multiples.innerHTML=state.doc.paragraphs.map(p=>`<div class="multiple" data-pid="${p.id}"><div><strong>${p.id.toUpperCase()}</strong><div class="para-pattern">${esc(p.pattern)}</div></div>${waveSVG(p.sentences,'map-wave',p.id)}<div class="sequence">${p.sentences.map(s=>s.level).join(' → ')}</div></div>`).join('');multiples.querySelectorAll('.multiple').forEach(el=>el.addEventListener('click',()=>{state.mode='levels';render();setTimeout(()=>document.querySelector(`#${el.dataset.pid}`)?.scrollIntoView({block:'center'}),0);}));}
+function select(id){state.selected=id;renderInspector(id);document.querySelectorAll('.sentence').forEach(e=>e.classList.toggle('selected',e.dataset.sid===id));renderTerrain();if(innerWidth<900)inspector.classList.add('open');}
+function renderInspector(id){const s=allSentences().find(x=>x.id===id);if(!s)return;const arr=allSentences(),idx=arr.findIndex(x=>x.id===id),prev=arr[idx-1],next=arr[idx+1],cues=derivedReview(s,prev);inspector.innerHTML=`<p class="eyebrow">SENTENCE INSPECTOR</p><h2>L${s.level} · ${esc(s.function)}</h2><p class="inspector-sentence">${esc(s.text)}</p><dl class="kv"><dt>Movement</dt><dd>${esc(s.movement)}</dd><dt>Confidence</dt><dd>${esc(s.confidence.toUpperCase())}</dd><dt>Previous</dt><dd>${prev?'L'+prev.level:'—'}</dd><dt>Next</dt><dd>${next?'L'+next.level:'—'}</dd><dt>Review</dt><dd>${cues.length?esc(cues.join(' / ')):'—'}</dd><dt>Source</dt><dd>${esc(s.provenance)}</dd></dl><div class="level-picker" aria-label="Levelを変更">${[1,2,3,4,5].map(n=>`<button class="level-choice ${s.level===n?'active':''}" data-level="${n}">L${n}</button>`).join('')}</div><p class="reason">${esc(s.reason)}</p>`;inspector.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>setLevel(id,+b.dataset.level)));}
+function setLevel(id,level){const s=allSentences().find(x=>x.id===id);if(!s)return;s.level=level;state.overrides[id]={level};localStorage.setItem('argument-altitude-overrides',JSON.stringify(state.overrides));render();select(id);}
+function renderReviewCount(){document.querySelector('#reviewCount').textContent=reviewItems().length;}
+function bindGlobal(){document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;render();window.scrollTo({top:0});}));document.querySelector('#reviewBtn').addEventListener('click',openReview);document.querySelectorAll('[data-review-close]').forEach(e=>e.addEventListener('click',closeReview));document.addEventListener('keydown',e=>{if(e.key==='Escape'){inspector.classList.remove('open');closeReview();}if(state.selected&&/^[1-5]$/.test(e.key)&&!e.metaKey&&!e.ctrlKey)setLevel(state.selected,+e.key);});}
+function openReview(){const items=reviewItems();document.querySelector('#reviewBody').innerHTML=items.length?items.map(({s,cues})=>`<div class="review-item" data-review-sid="${s.id}"><span class="review-tag">${esc(cues.join(' · '))}</span><p>${esc(s.text)}</p><small>L${s.level} · ${esc(s.confidence)}</small></div>`).join(''):'<p>いまの判定では読み直し候補はありません。</p>';document.querySelectorAll('[data-review-sid]').forEach(el=>el.addEventListener('click',()=>{closeReview();state.mode='levels';render();select(el.dataset.reviewSid);setTimeout(()=>document.querySelector(`.sentence[data-sid="${el.dataset.reviewSid}"]`)?.scrollIntoView({block:'center'}),0);}));document.querySelector('#reviewSheet').setAttribute('aria-hidden','false');}
+function closeReview(){document.querySelector('#reviewSheet').setAttribute('aria-hidden','true');}
+function highlight(id){document.querySelectorAll('[data-sid]').forEach(e=>{if(e.tagName==='circle')e.setAttribute('opacity',!id||e.dataset.sid===id?'1':'.28');else if(e.classList.contains('sentence'))e.style.background=id&&e.dataset.sid===id?'#fff4cf':'';});}
+function showTip(e,s){tip.hidden=false;tip.textContent=`${s.id} · L${s.level} · ${s.function}\n${s.text.slice(0,52)}${s.text.length>52?'…':''}`;tip.style.left=`${Math.min(innerWidth-320,e.clientX+12)}px`;tip.style.top=`${e.clientY+12}px`;highlight(s.id);}
+function hideTip(){tip.hidden=true;highlight(null);}
+function svg(name,attrs){const el=document.createElementNS(ns,name);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));return el;}
+function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
