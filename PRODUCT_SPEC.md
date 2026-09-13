@@ -1,16 +1,30 @@
-# Argument Altitude — Product Spec v4
+# Argument Altitude — Product Spec v4.1
 
 ## North Star
 
-**論考本文を読むサイトではなく、複数の論考の「骨格」を収集し、比較可能な形で保存するArchive。**
+**論考の骨格を収集するArchiveを土台に、書くときに構造を再利用できるToolへ育てる。**
 
-実際の文章は表示せず、各Paragraphを次の要素へ抽象化する。
+原文本文は表示せず、Paragraphを抽象化する。
 
 - L1〜L5：主要な抽象度
-- Role：論証上の役割
+- Core Role：論証上の役割
+- roleDetail：テーマ・文章固有の補助ラベル
 - Structural Summary：その段落が論証の中で何をしているか
-- Why：なぜそのLevelと判断したか
+- Why：Level判定理由
 - Confidence：判定確信度
+
+## Calibration state
+
+2026-09-13時点：4論考・130 paragraph units。
+
+異なる型を投入して、Library / Role / Levelを校正済み。
+
+詳細：
+
+- `ROLE_INVENTORY.md`
+- `LEVEL_CALIBRATION.md`
+- `CALIBRATION_NOTES.md`
+- `UX_REVIEW.md`
 
 ## Information architecture
 
@@ -18,58 +32,45 @@
 Analysis Library
 └ Article
    ├ Thesis
+   ├ Structural Signature
    ├ Structural Review
    └ Section
-      └ Paragraph
+      └ Paragraph Unit
 ```
 
-Libraryをホームとし、単記事ページを最上位に置かない。
+Libraryをホームとする。
 
 ## Library
 
-一覧はカードギャラリーではなく縦型Archive。
+縦型Archive。
 
-各Articleに表示するもの：
+主表示：
 
-- Title
-- Subtitle
+- Title / Subtitle
 - Section / Paragraph Unit数
 - Structural Signature
 - Structural Note
-- Tags
 - 原文リンク
-- 「分析を見る」導線
+- 「分析を見る」
 
-Structural Signatureは内容要約ではなく、論証の進行そのものを一行で表す。
+Topic Tagsはdataには保持するが、構造選択に寄与しなかったため現在のUIでは非表示。
 
-例：
-
-`現在の常識 → 逆の過去 → 複線的因果 → 理論化 → 現在 → 規範判断`
+Structural Signatureは内容要約ではなく、論証の運動を表す。
 
 ## Article
 
-記事詳細では次を表示する。
+表示順：
 
-1. Analysis Libraryへ戻る導線
-2. Title / Subtitle
-3. 原文CTA
-4. Thesis
+1. Analysis Libraryへ戻る
+2. Title / Subtitle / 原文CTA
+3. Thesis
+4. Structural Signature
 5. Structural Review
 6. Level Guide
 7. Section
 8. Paragraph Reverse Outline
 
 ## Level orientation
-
-Levelの定義自体は従来どおり。
-
-- L1 GROUND — 証拠・個別事実
-- L2 SCENE — 具体説明・背景
-- L3 BRIDGE — 解釈・橋渡し
-- L4 CLAIM — 部分主張・論点
-- L5 HORIZON — 理論・広い含意
-
-ただし空間表現を次に統一する。
 
 ```text
 抽象                                      具体
@@ -78,33 +79,47 @@ L5 HORIZON → L4 CLAIM → L3 BRIDGE → L2 SCENE → L1 GROUND
 
 **L5が最も左、L1が最も右。**
 
-Paragraphの表示depthは：
-
 `depth = 5 - level`
 
-とする。
+Level番号自体は反転しない。
 
-Level番号そのものを反転・変換してはいけない。
+### Calibration
 
-## Movement
+- L3：具体と抽象の接続・意味づけ
+- L4：Sectionや局所論証を支配する命題
+- L5：複数SectionまたはDocument全体を束ねる原理
 
-Paragraph順は維持する。
+語彙の難しさではなく「束ねる範囲」で判断する。
 
-- Levelが上がる：より抽象へ移動 → UI上は左方向
-- Levelが下がる：より具体へ移動 → UI上は右方向
-- 同じLevel：HOLD
+## Core Roles
 
-Movement表示も位置の意味と矛盾させない。
+比較可能性を守るため `role` は次の12種類へ固定する。
+
+- ENTRY
+- QUESTION
+- EVIDENCE
+- INTERPRETATION
+- BRIDGE
+- CLAIM
+- TURN
+- QUALIFICATION
+- APPLICATION
+- SYNTHESIS
+- RETURN
+- CONCLUSION
+
+固有ニュアンスは `roleDetail`。
+
+例：`EVIDENCE / COUNTEREXAMPLE`、`TURN / RESET`。
 
 ## Paragraph Reverse Outline
-
-各Paragraphを1つの構造要素として表示する。
 
 通常表示：
 
 - Paragraph ID
 - Level
-- Role
+- Core Role
+- roleDetail（ある場合のみ）
 - Structural Summary
 - Movement
 
@@ -119,8 +134,6 @@ Details on demand：
 
 点数化しない。
 
-表示項目：
-
 - 全体構造
 - 強いところ
 - 弱いところ
@@ -128,113 +141,75 @@ Details on demand：
 - 改善余地
 - 盗める構成技法
 
-目的は文章の良し悪しを採点することではなく、骨格の説得戦略を評価すること。
-
 ## Data architecture
 
-### Library manifest
+`data/index.json` はLibrary用manifest。
 
-`data/index.json`
-
-一覧に必要な軽量情報だけを持つ。
-
-- id
-- slug
-- dataPath
-- title
-- subtitle
-- source
-- analyzedAt
-- sectionCount
-- paragraphCount
-- structuralSignature
-- structuralNote
-- tags
-
-### Article data
-
-各記事JSONはSection / Paragraphの構造分析を保持する。
+各Article JSONは `schemaVersion: 4.1` を基準とし、Section / Paragraph分析とStructural Reviewを保持する。
 
 外部著作物全文は保存しない。
 
 ## Routing
 
-GitHub Pages互換性を優先しHash Routingを採用。
-
 - `#/` — Library
 - `#/article/<slug>` — Article
 
-Browser Back / Forwardで正常に遷移できること。
+GitHub Pages互換のHash Routing。
+
+## Movement
+
+- Levelが上がる：抽象化 → UI上は左 `← ABSTRACT`
+- Levelが下がる：具体化 → UI上は右 `CONCRETE →`
+- 同Level：HOLD
 
 ## Source / copyright
 
-external sourceでは原文本文をpublic dataへ保存しない。
+External sourceでは原文本文をpublic dataへ保存しない。
 
-保持するのは：
+保持：URL / 書誌情報 / Thesis / Signature / Review / 構造分析。
 
-- URL
-- 書誌情報
-- Thesis
-- Structural Signature
-- Structural Review
-- Paragraph構造分析
-
-のみ。
-
-## Import / Export
-
-ImportはArticle JSONを対象とする。
-
-Import後はArticle Viewとして確認できる。
-
-Exportは現在表示中のArticle JSONのみ。
-
-Library manifest編集は別責務とし、ブラウザからGitHubへ直接書き込まない。
-
-## Mobile
-
-Desktopのインデントをそのまま縮小しない。
-
-- Desktop indent step：約50px
-- Mobile：12〜16px程度
-
-ただし必ずL5が左、L1が右という順序は維持する。
-
-L1でも本文幅が潰れないこと。
-
-## Favicon
-
-抽象へ向かう方向を新しい空間モデルへ合わせる。
-
-**右下 → 左上**へ上がる階段として表現する。
+Owned sourceでもArgument Altitude側には原則として本文を複製せず、構造分析と原文リンクを分離する。
 
 ## Forbidden
 
-- 上部の全文折れ線
+- 上部折れ線
 - Sentence単位表示
 - 原文全文表示
 - Paragraph Wave
-- U字一致率
 - 平均抽象度
-- 100点満点
-- L5を良いとみなす評価
-- Libraryを画像中心カードギャラリーにすること
+- U字一致率
+- 点数
+- L5を良いと扱う評価
+- Topic TagsをLibraryの主軸にする
+- 4件時点でArchetypeを固定する
+- 実需なしの検索・比較・フィルター
 
 ## Acceptance criteria
 
-- 5秒以内に「論証構造の分析一覧」だと理解できる
-- LibraryからArticleへ1クリック
-- ArticleからLibraryへ迷わず戻れる
-- L5=左・L1=右がGuideとParagraph位置で一致する
-- Structural Signatureだけで記事同士の骨格差を想像できる
-- Structural Summaryだけで原文なしでも論の進行を追える
-- Structural Reviewが内容要約ではなく骨格評価になっている
+- LibraryでSignatureだけを見ても4記事の構造差が分かる
+- Library→Article、Article→Libraryが1操作
+- L5=左 / L1=右がGuideとParagraph位置で一致
+- Core Roleだけで異なるテーマの分析を共通表現できる
+- roleDetailなしでも大筋を理解できる
+- Structural Summaryだけで論の進行を追える
+- Structural Reviewが採点ではなく説得戦略の評価になっている
 - 原文CTAを見失わない
-- MobileでもL1段落の可読幅が維持される
-- Browser Back / Forwardが動作する
+- MobileでもL1の可読幅が維持される
+
+## Product decision
+
+複数記事を入れた結果、現時点の方向性は：
+
+1. **文章を書くために構造を再利用するTool**
+2. 論証パターンを発見するArchive
+3. 論考を保存するArchive
+
+Archiveは最終目的ではなく、再利用できる説得構造を蓄積する基盤。
 
 ## Next milestone
 
-次に追加すべきものは検索ではなく **2本目の実データ**。
+**STRUCTURE RECIPE / USE THIS STRUCTURE** を検証する。
 
-Libraryが複数記事で本当に機能するかを確認し、Structural Signatureの粒度を校正する。
+Structural Signature + Reverse Outlineから、固有テーマを除いた5〜10段階の再利用可能な執筆手順を作る。
+
+ただしArchetype分類、比較、検索はまだ実装しない。
