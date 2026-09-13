@@ -1,21 +1,34 @@
-# Argument Altitude — L1–L5
+# Argument Altitude — Paragraph Reverse Outline
 
-Eric Hayot の **The Uneven U / Five Levels of Abstraction** を参考に、文章を「論証の高度変化」として読むためのワークベンチ。
+Eric Hayot の **The Uneven U / Five Levels of Abstraction** を参考に、論考の各段落を「主要な抽象度」と「論証上の役割」で再構成するための静的Webツール。
 
-## v2 の思想
+## v3 の思想
 
-- L1〜L5は点数ではなく、証拠からの距離についての編集可能な仮説
-- 主役は原文。グラフは原文へ戻るために使う
-- Sentence → Paragraph → Document の3スケールを連動
-- READ / LEVELS / MAP の3モード
-- AI判定を確定扱いせず、人間が1〜5キーで修正可能
-- 修正するとParagraph Wave / Document Terrainが即更新
-- 低確信度や大ジャンプだけReview Queueへ送る
+- 分析単位は **SentenceではなくParagraph**
+- 原文本文は表示しない
+- 各段落を `L1〜L5 / Role / Structural Summary / Why` に抽象化する
+- L1ほど具体、L5ほど抽象
+- 抽象度はグラフではなく **左→右のインデント** で見せる
+- 段落をクリックしたときだけ判定理由を開く
+- 「何が書いてあるか」ではなく「その段落が論証の中で何をしているか」を残す
 
-## Seed data
+## Data schema
 
-`data/demo.json` は外部記事の短い導入部と、自作の校正用段落を収録。外部著作物全文はpublic repoへ保存しない方針。
+`data/demo.json` は schemaVersion 3.0。
+
+```text
+Document
+└ Section
+   └ Paragraph
+      ├ level: 1..5
+      ├ role
+      ├ structuralSummary
+      ├ reason
+      └ confidence
+```
+
+外部著作物の原文本文はpublic repoへ保存せず、URLと構造分析だけを保持する。
 
 ## Deploy
 
-静的ファイルのみ。GitHub Pagesでそのまま配信可能。
+静的ファイルのみ。GitHub Pagesで配信。
