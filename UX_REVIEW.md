@@ -1,93 +1,159 @@
-# UX Review — Multi-Article Calibration
+# UX Review — v5.1 Structure Map Audit
 
-## Library
+## Scope
 
-### Keep
+今回の対象は新機能ではなく、v5で導入したStructure Mapを「本当に使える地図」にすること。
 
-**Structural Signature**
+優先順位は：
 
-記事選択に最も効く。テーマではなく「論がどう進むか」を直接比較できる。
+1. 迷わない
+2. 読みにくくない
+3. 移動が速い
+4. 見た目
 
-**Structural Note**
+実装コードと4論考・130 paragraph unitsを使ったヒューリスティック監査を実施した。
 
-Signatureだけでは出にくい「この骨格の妙」を一文で補える。
+## Findings
 
-**Section / Paragraph Unit count**
+### 1. Mobile orientation — FIXED
 
-優先度は低いが、構造の大きさを一瞬で把握できるため小さく残す。
+問題：
 
-**Original source link**
+Structure Mapを横スクロールすると、Section名まで画面外へ消え、どの行を見ているか分かりにくい。
 
-分析から原文へ戻る導線として残す。
+修正：
 
-### Remove from visible Library
+- MobileのみSection列をsticky leftにした
+- L5〜L1の列だけ横スクロールする
+- 現在Sectionではsticky列も背景を変える
+- `横に見る →` の小さなaffordanceを追加
 
-**Topic Tags**
+判断：
 
-4本並べると、内容カテゴリへ注意を戻し、構造選択にはほぼ効かなかった。データには保持するが表示しない。
+MobileでAccordion形式へ別UIを作るより、PCと同じ構造を保ったまま方向感だけ補う方が認知コストが低い。
 
-### Do not add yet
+### 2. Map density — FIXED
 
-- Search
-- Filter
-- Sort
-- Compare
-- Archetype badge
-- Graph
+問題：
 
-4件では必要性よりUIノイズの方が大きい。
+Map Point内で `P12 + INTERPRETATION` のようにIDとRoleを同時表示すると、小さいセルで情報密度が高すぎる。
 
-## Article
+修正：
 
-### Keep
+- Map上ではParagraph IDを非表示
+- Core Roleを短縮表示
+- Paragraph ID / full Role / Structural Summaryはaria-labelとtitleへ保持
+- Section titleはMap内だけ短縮表示
 
-**Thesis**
+情報優先度：
 
-何についての論考かを最低限固定する。
+`位置 > Role > Paragraph ID`
 
-**Structural Signature**
+### 3. Library hierarchy — FIXED
 
-Libraryで選んだ理由をArticle内でも保持するため追加。
+問題：
 
-**Structural Review**
+「最近分析した文章」が主目的なのに、連番・Unit数・Subtitleが目立ち、更新時期が分からない。
 
-骨格を眺めた後の「評価・転用」に必要。
+修正：
 
-**L5-left / L1-right guide**
+Libraryの主表示を：
 
-直リンクでArticleへ入るケースがあるため、現時点では毎記事表示する。
+- analyzed date
+- title
+- Structural Signature
 
-**WHY Lx / Confidence**
+へ寄せた。
 
-通常は閉じるDetails on Demandのまま維持。判定の権威化を防ぐ役割がある。
+Section数は小さく残し、Paragraph Unit数・連番・Subtitleは一覧から削除した。
 
-### Role display
+原文リンクは補助導線として残す。
 
-Core Roleを主表示し、`roleDetail` を補助表示する。
+### 4. Return to Map — FIXED
 
-例：
+問題：
 
-`EVIDENCE / COUNTEREXAMPLE`
+Mapから深いParagraphへ移動したあと、30〜35 unitsある長文では次の移動のためにMapへ戻るコストが高い。
 
-これにより記事間比較可能性と固有ニュアンスを両立する。
+修正：
 
-## Next-feature ranking
+- Structure Mapを上方向へ通過した後だけ `MAP ↑` を表示
+- Mapが画面内、またはまだ下にあるときは表示しない
+- IntersectionObserverで制御
+- 1クリックでStructure Mapへ戻る
 
-| Candidate | Frequency | Impact | Complexity | Concept fit | Decision |
-|---|---:|---:|---:|---:|---|
-| Structure Recipe / Use this structure | 5 | 5 | 3 | 5 | NEXT |
-| Compare two structures | 3 | 4 | 4 | 5 | WAIT |
-| Archetype classification | 2 | 4 | 3 | 5 | WAIT FOR 8–10 ARTICLES |
-| Search | 1 | 2 | 2 | 3 | NOT YET |
-| Tag filter | 1 | 1 | 2 | 2 | NOT YET |
-| Auto-analysis API | 2 | 4 | 5 | 3 | LATER |
+常時sticky navigationは避け、必要な状態だけ表示する。
 
-数字は優先順位の補助であり、合計点では決めない。
+### 5. Paragraph hierarchy — FIXED
 
-## Product decision
+問題：
 
-現在の最も強いNorth Star：
+黒塗りのLevel chipがStructural Summaryより強く見える可能性があった。
 
-**読むためのArchiveから、書くときに構造を盗めるToolへ。**
+修正：
 
-次フェーズでは新しい一覧機能より、1記事から「テーマを抜いた再利用可能な構成手順」を取り出せるかを検証する。
+- Level chipをoutlineへ変更
+- Structural Summaryを最も強い本文情報として維持
+- Role / Paragraph IDは補助情報のまま
+
+## Kept
+
+- Structure Map = Section × L5〜L1
+- L5 left / L1 right
+- Map Point / Sectionのclick navigation
+- active Section indication
+- Structural Signature
+- Short Review
+- Thesis details
+- Paragraph indentation
+- WHY Lx / Confidence / roleDetail
+- Full Structural Review
+- 原文CTA
+
+## Not changed yet
+
+### Full Review duplication
+
+Short ReviewとFull Reviewには `強み / 転換 / 弱み` の重複がある。
+
+ただしShort Reviewはpreview、Full Reviewは記事末尾の評価という役割差があるため、現段階では削らない。
+
+### Details usage
+
+WHY Lx / Confidence / roleDetailがどれだけ実際に開かれるかは、コード監査では判断できない。
+
+利用観察までは保持する。
+
+### Same-day ordering
+
+現データは複数記事が同じ `analyzedAt` 日付を持つ。
+
+同日内の順序が実際に問題になった場合のみtimestamp化する。UI都合だけでschema変更しない。
+
+## Current UX decision
+
+現時点では **Quick Traceを追加しない**。
+
+理由：
+
+Quick Traceが解決する「重要Paragraphが分からない」という問題より先に、Mapの方向感・密度・戻りコストが明確な摩擦だったため。
+
+これらはv5.1で修正した。
+
+次は実際に数本の記事を読む運用を行い、以下が繰り返し発生するかを見る：
+
+- Map Pointが多すぎて読む場所を決められない
+- 重要Paragraphが判別できない
+- Mapは分かるが読む順番が決まらない
+
+これが繰り返し起きた場合のみQuick Traceを実装候補へ上げる。
+
+## Next-feature decision
+
+現時点：**E. 何も追加しない。v5.1を使う。**
+
+次の進歩は機能数ではなく、
+
+**「Structure Mapだけで、考えずに移動できるか」**
+
+を実利用で確認すること。
