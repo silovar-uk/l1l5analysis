@@ -1,5 +1,5 @@
-const DATA_URL = './data/demo.json';
-const state = { doc: null };
+const INDEX_URL = './data/index.json';
+const state = { manifest: null, doc: null, route: 'library' };
 
 const hero = document.querySelector('#hero');
 const evaluationRoot = document.querySelector('#evaluation');
@@ -10,11 +10,11 @@ const exportBtn = document.querySelector('#exportBtn');
 const importFile = document.querySelector('#importFile');
 
 const LEVELS = [
-  { level: 1, name: 'GROUND', ja: '証拠・個別事実' },
-  { level: 2, name: 'SCENE', ja: '具体説明・背景' },
-  { level: 3, name: 'BRIDGE', ja: '解釈・橋渡し' },
+  { level: 5, name: 'HORIZON', ja: '理論・広い含意' },
   { level: 4, name: 'CLAIM', ja: '部分主張・論点' },
-  { level: 5, name: 'HORIZON', ja: '理論・広い含意' }
+  { level: 3, name: 'BRIDGE', ja: '解釈・橋渡し' },
+  { level: 2, name: 'SCENE', ja: '具体説明・背景' },
+  { level: 1, name: 'GROUND', ja: '証拠・個別事実' }
 ];
 
 const CURATED_EVALUATIONS = {
@@ -32,15 +32,14 @@ init();
 
 async function init() {
   try {
-    const response = await fetch(DATA_URL, { cache: 'no-store' });
+    const response = await fetch(INDEX_URL, { cache: 'no-store' });
     if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-    const data = await response.json();
-    validateDoc(data);
-    state.doc = data;
-    render();
+    state.manifest = await response.json();
+    validateManifest(state.manifest);
     bind();
+    await route();
   } catch (error) {
-    hero.innerHTML = `<div class="error-state"><strong>データを読み込めませんでした。</strong><span>${esc(error.message)}</span></div>`;
+    showError(error);
   }
 }
 
@@ -48,9 +47,89 @@ function bind() {
   importBtn.addEventListener('click', () => importFile.click());
   importFile.addEventListener('change', importAnalysis);
   exportBtn.addEventListener('click', exportAnalysis);
+  window.addEventListener('hashchange', route);
 }
 
-function render() {
+async function route() {
+  const match = location.hash.match(/^#\/article\/([^/?#]+)/);
+  if (!match) {
+    state.route = 'library';
+    state.doc = null;
+    renderLibrary();
+    return;
+  }
+
+  const slug = decodeURIComponent(match[1]);
+  const entry = state.manifest.articles.find(article => article.slug === slug);
+  if (!entry) {
+    showError(new Error('指定された分析が見つかりません。'), true);
+    return;
+  }
+
+  try {
+    const response = await fetch(entry.dataPath, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+    const data = await response.json();
+    validateDoc(data);
+    state.route = 'article';
+    state.doc = data;
+    renderArticle();
+    window.scrollTo({ top: 0 });
+  } catch (error) {
+    showError(error, true);
+  }
+}
+
+function renderLibrary() {
+  document.title = 'Argument Altitude — Analysis Library';
+  document.body.dataset.view = 'library';
+  exportBtn.hidden = true;
+  evaluationRoot.hidden = true;
+  levelGuide.hidden = true;
+
+  hero.innerHTML = `
+    <header class="library-head">
+      <p class="eyebrow">ANALYSIS LIBRARY</p>
+      <h1>文章ではなく、<br>論証の骨格を集める。</h1>
+      <p>各論考を段落単位のL1〜L5と役割へ抽象化し、「何を言ったか」ではなく「どう組み立てたか」を保存するArchive。</p>
+    </header>`;
+
+  sectionsRoot.innerHTML = `
+    <section class="library-list" aria-label="分析一覧">
+      ${state.manifest.articles.map(renderLibraryItem).join('')}
+    </section>`;
+}
+
+function renderLibraryItem(article) {
+  const tags = (article.tags || []).map(tag => `<span>${esc(tag)}</span>`).join('');
+  return `
+    <article class="library-item">
+      <div class="library-item-top">
+        <div>
+          <p class="library-kicker">${esc(article.sectionCount)} SECTIONS · ${esc(article.paragraphCount)} PARAGRAPH UNITS</p>
+          <h2><a href="#/article/${encodeURIComponent(article.slug)}">${esc(article.title)}</a></h2>
+          ${article.subtitle ? `<p class="library-subtitle">${esc(article.subtitle)}</p>` : ''}
+        </div>
+        <a class="library-open" href="#/article/${encodeURIComponent(article.slug)}">分析を見る <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="signature-block">
+        <span>STRUCTURAL SIGNATURE</span>
+        <p>${esc(article.structuralSignature || '')}</p>
+      </div>
+      ${article.structuralNote ? `<p class="structural-note"><strong>STRUCTURAL NOTE</strong>${esc(article.structuralNote)}</p>` : ''}
+      <div class="library-footer">
+        <div class="library-tags">${tags}</div>
+        ${article.source?.url ? `<a href="${attr(article.source.url)}" target="_blank" rel="noreferrer">原文 ↗</a>` : ''}
+      </div>
+    </article>`;
+}
+
+function renderArticle() {
+  document.title = `${state.doc.title} — Argument Altitude`;
+  document.body.dataset.view = 'article';
+  exportBtn.hidden = false;
+  evaluationRoot.hidden = false;
+  levelGuide.hidden = false;
   renderHero();
   renderEvaluation();
   renderGuide();
@@ -62,6 +141,7 @@ function renderHero() {
   const paragraphCount = d.sections.reduce((sum, section) => sum + section.paragraphs.length, 0);
   hero.innerHTML = `
     <header class="doc-head">
+      <a class="back-link" href="#/">← Analysis Library</a>
       <p class="eyebrow">PARAGRAPH REVERSE OUTLINE</p>
       <div class="title-row">
         <div class="title-copy">
@@ -76,7 +156,7 @@ function renderHero() {
         <span>${paragraphCount} paragraph units</span>
       </div>
       <p class="thesis">${esc(d.thesis || '')}</p>
-      <p class="method-note">原文本文は表示しません。各段落を「そこで何が書かれているか」ではなく、<strong>その段落が論証の中で何をしているか</strong>へ抽象化しています。L1ほど具体、L5ほど抽象です。</p>
+      <p class="method-note">原文本文は表示しません。各段落を「そこで何が書かれているか」ではなく、<strong>その段落が論証の中で何をしているか</strong>へ抽象化しています。左のL5ほど抽象、右のL1ほど具体です。</p>
     </header>`;
 }
 
@@ -125,7 +205,7 @@ function inferEvaluation(doc) {
 
 function renderGuide() {
   levelGuide.innerHTML = `
-    <div class="guide-copy"><span>具体</span><span>抽象</span></div>
+    <div class="guide-copy"><span>抽象</span><span>具体</span></div>
     <div class="guide-levels">
       ${LEVELS.map(item => `<div class="guide-level"><strong>L${item.level}</strong><span>${esc(item.ja)}</span></div>`).join('')}
     </div>`;
@@ -157,8 +237,9 @@ function renderSection(section) {
 }
 
 function renderParagraph(paragraph, movement) {
+  const depth = 5 - paragraph.level;
   return `
-    <details class="paragraph-item level-${paragraph.level}" style="--level:${paragraph.level}">
+    <details class="paragraph-item level-${paragraph.level}" style="--depth:${depth}">
       <summary>
         <div class="paragraph-meta">
           <span class="paragraph-id">${esc(paragraph.id.toUpperCase())}</span>
@@ -179,8 +260,8 @@ function renderParagraph(paragraph, movement) {
 function movementLabel(previous, current) {
   if (previous == null) return { label: 'START', className: 'hold' };
   const delta = current - previous;
-  if (delta > 0) return { label: `↑ ABSTRACT +${delta}`, className: 'up' };
-  if (delta < 0) return { label: `↓ CONCRETE ${delta}`, className: 'down' };
+  if (delta > 0) return { label: `← ABSTRACT +${delta}`, className: 'up' };
+  if (delta < 0) return { label: `CONCRETE +${Math.abs(delta)} →`, className: 'down' };
   return { label: '→ HOLD', className: 'hold' };
 }
 
@@ -191,7 +272,8 @@ async function importAnalysis() {
     const data = JSON.parse(await file.text());
     validateDoc(data);
     state.doc = data;
-    render();
+    state.route = 'article';
+    renderArticle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (error) {
     alert(`Importできません: ${error.message}`);
@@ -201,6 +283,7 @@ async function importAnalysis() {
 }
 
 function exportAnalysis() {
+  if (!state.doc) return;
   const blob = new Blob([JSON.stringify(state.doc, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -208,6 +291,13 @@ function exportAnalysis() {
   a.download = `${state.doc.id || 'argument-altitude-outline'}.json`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+function validateManifest(data) {
+  if (!data || !Array.isArray(data.articles)) throw new Error('Analysis Libraryのindexが不正です。');
+  for (const article of data.articles) {
+    if (!article.slug || !article.dataPath || !article.title) throw new Error('Library itemに必要な情報がありません。');
+  }
 }
 
 function validateDoc(data) {
@@ -222,6 +312,14 @@ function validateDoc(data) {
       if (!paragraph.structuralSummary) throw new Error(`${paragraph.id} の structuralSummary がありません`);
     }
   }
+}
+
+function showError(error, withBack = false) {
+  document.title = 'Error — Argument Altitude';
+  evaluationRoot.hidden = true;
+  levelGuide.hidden = true;
+  sectionsRoot.innerHTML = '';
+  hero.innerHTML = `<div class="error-state"><strong>データを読み込めませんでした。</strong><span>${esc(error.message)}</span>${withBack ? '<a href="#/">← Analysis Library</a>' : ''}</div>`;
 }
 
 function esc(value = '') {
